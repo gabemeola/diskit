@@ -48,11 +48,27 @@ func GenSchema(schema *base.SchemaProxy, resolve ResolveSchemaRef) (fileName str
 
 	switch schemaType {
 	case "string":
-		content = []byte(fmt.Sprintf("export type %s = string", schemaName))
+		content = []byte(fmt.Sprintf("export type %s = string & {}", schemaName))
 	case "object":
 		code := fmt.Sprintf("export type %s = {", schemaName)
-		prop := s.Properties.OrderedMap.Newest()
-		code += fmt.Sprintf("\n	%s: %s;", prop.Key, "string")
+		for prop := s.Properties.OrderedMap.Oldest(); prop != nil; prop = prop.Next() {
+			schemaProxy := prop.Value
+			refName := schemaProxy.GetReference()
+			isRef := refName != ""
+			// Handle Ref Linking
+			if isRef {
+				childRefName := resolve(schemaProxy)
+				code += fmt.Sprintf("\n	%s: `%s`;", prop.Key, childRefName)
+				continue
+			}
+			schema := schemaProxy.Schema()
+			if len(schema.Type) == 0 {
+				// TODO: Skip "oneOf" for now
+				continue
+			}
+			fmt.Printf("[%s]: %+v\n", prop.Key, schema.Type)
+			code += fmt.Sprintf("\n	%s: %s;", prop.Key, schemaToTSType(schemaProxy))
+		}
 		// m := s.Properties.OrderedMap
 		// println("PROPS:")
 		// fmt.Printf("%+v\n", m)
@@ -62,7 +78,38 @@ func GenSchema(schema *base.SchemaProxy, resolve ResolveSchemaRef) (fileName str
 		code += "\n}"
 		content = []byte(code)
 		// fmt.Printf("GEN (%s): %s\n", fileName, code)
+	case "integer":
+		content = []byte(fmt.Sprintf("export type %s = number & {}", schemaName))
 	}
 
 	return
+}
+
+func schemaToTSType(schema *base.SchemaProxy) string {
+	s := schema.Schema()
+	schemaTypes := s.Type
+	tsTypes := make([]string, 0, len(schemaTypes))
+	if len(schemaTypes) > 0 {
+		for _, schemaType := range schemaTypes {
+			switch schemaType {
+			case "string":
+				tsTypes = append(tsTypes, "string")
+			case "null":
+				tsTypes = append(tsTypes, "null")
+			case "integer":
+				tsTypes = append(tsTypes, "number")
+			case "boolean":
+				tsTypes = append(tsTypes, "boolean")
+			case "array":
+				tsTypes = append(tsTypes, "Array<unknown>")
+			default:
+				tsTypes = append(tsTypes, "unknown")
+			}
+		}
+	}
+	// if len(schemaTypes) != 1 {
+	// 	log.Panicf("expected schema type (%s) to contain 1 item. Got: %+v", schema.GetReference(), schemaTypes)
+	// }
+
+	return strings.Join(tsTypes, " | ")
 }

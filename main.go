@@ -14,6 +14,7 @@ import (
 )
 
 var initialSchemasToGen = map[string]*base.SchemaProxy{}
+var processedSchemas = map[string]struct{}{}
 
 func main() {
 	file, err := os.ReadFile("openapi.json")
@@ -98,6 +99,14 @@ func main() {
 		// }
 
 		for schema := range schemaGenCh {
+			refName := schema.GetReference()
+			_, hasProcessed := processedSchemas[refName]
+			// Skip if already processed
+			if hasProcessed {
+				wg.Done()
+				continue
+			}
+			processedSchemas[refName] = struct{}{}
 			fileName, data := typescript.GenSchema(schema.SchemaProxy, resolveSchemaRef)
 			err = os.WriteFile(filepath.Join("tmp", "schema", fileName), data, os.ModePerm)
 			if err != nil {
@@ -117,6 +126,7 @@ func main() {
 	}
 
 	wg.Wait()
+	close(schemaGenCh)
 }
 
 func invariantErr(err error, message string) {
