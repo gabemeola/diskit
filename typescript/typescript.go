@@ -70,7 +70,12 @@ func GenSchema(schema *base.SchemaProxy, resolve ResolveSchemaRef) (fileName str
 				continue
 			}
 			fmt.Printf("[%s]: %+v\n", prop.Key, schema.Type)
-			code += fmt.Sprintf("\n	%s: %s;", prop.Key, schemaToTSType(schemaProxy))
+			key := prop.Key
+			valTSType := schemaToTSType(schemaProxy)
+			if strings.Contains(valTSType, "null") {
+				key += "?"
+			}
+			code += fmt.Sprintf("\n	%s: %s;", key, valTSType)
 		}
 		// m := s.Properties.OrderedMap
 		// println("PROPS:")

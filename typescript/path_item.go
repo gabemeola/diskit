@@ -10,6 +10,10 @@ import (
 
 func GenPathItem(path *v3.PathItem, resolve ResolveSchemaRef) (fileName string, content []byte) {
 	op := path.Get
+	if op == nil {
+		// TODO: Support other CRUD operations
+		return
+	}
 	id := op.OperationId
 	log.Printf("Generating API: %s", id)
 	resSchema := op.Responses.FindResponseByCode(200).Content.First().Value().Schema
