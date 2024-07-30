@@ -14,7 +14,6 @@ import (
 )
 
 var initialSchemasToGen = map[string]*base.SchemaProxy{}
-var processedSchemas = map[string]struct{}{}
 
 func main() {
 	file, err := os.ReadFile("openapi.json")
@@ -90,6 +89,7 @@ func main() {
 		return refName
 	}
 
+	// Process new Schemas in Queue
 	go func() {
 		// for {
 		// 	select {
@@ -97,6 +97,7 @@ func main() {
 		// 		// schema.string
 		// 	}
 		// }
+		var processedSchemas = map[string]struct{}{}
 
 		for schema := range schemaGenCh {
 			refName := schema.GetReference()
@@ -117,6 +118,7 @@ func main() {
 
 	}()
 
+	// Gen Initial Schemas
 	for refName, schema := range initialSchemasToGen {
 		wg.Add(1)
 		schemaGenCh <- struct {
@@ -124,6 +126,11 @@ func main() {
 			*base.SchemaProxy
 		}{refName, schema}
 	}
+
+	// Gen API
+	fileName, content := typescript.GenPathItem(path, resolveSchemaRef)
+	err = os.WriteFile(filepath.Join("tmp", "api", fileName), content, os.ModePerm)
+	invariantErr(err, "error writing file")
 
 	wg.Wait()
 	close(schemaGenCh)

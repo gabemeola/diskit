@@ -11,10 +11,10 @@ import (
 
 func GenFunction(f ast.Function) string {
 	return fmt.Sprintf(`
-	 function %s(): %s {
-	 
-	 }
-`, f.Name, mapType(f.ReturnType))
+function %s(): %s {
+
+}`,
+		f.Name, mapType(f.ReturnType))
 }
 
 func mapType(t ast.Type) string {
@@ -35,7 +35,7 @@ type ResolveSchemaRef = func(schema *base.SchemaProxy) string
 
 func GenSchema(schema *base.SchemaProxy, resolve ResolveSchemaRef) (fileName string, content []byte) {
 	refName := schema.GetReference()
-	log.Printf("Generating: %s", refName)
+	log.Printf("Generating Schema: %s", refName)
 	s := schema.Schema()
 	schemaTypes := s.Type
 	if len(schemaTypes) != 1 {
