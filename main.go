@@ -45,8 +45,8 @@ func main() {
 	PrettyPrint(path)
 	refSchema := path.Get.Responses.FindResponseByCode(200).Content.First().Value().Schema
 	schemaRefName := refSchema.GetReference()
-	schema := refSchema.Schema()
-	fmt.Printf("%s: %+v\n", schemaRefName, schema)
+	// schema := refSchema.Schema()
+	// fmt.Printf("%s: %+v\n", schemaRefName, schema)
 	initialSchemasToGen[schemaRefName] = refSchema
 
 	// fmt.Printf("%+v\n", refSchema.GetReferenceOrigin())

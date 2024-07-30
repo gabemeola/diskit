@@ -50,6 +50,7 @@ func GenSchema(schema *base.SchemaProxy, resolve ResolveSchemaRef) (fileName str
 	case "string":
 		content = []byte(fmt.Sprintf("export type %s = string & {}", schemaName))
 	case "object":
+		imports := ""
 		code := fmt.Sprintf("export type %s = {", schemaName)
 		for prop := s.Properties.OrderedMap.Oldest(); prop != nil; prop = prop.Next() {
 			schemaProxy := prop.Value
@@ -58,7 +59,9 @@ func GenSchema(schema *base.SchemaProxy, resolve ResolveSchemaRef) (fileName str
 			// Handle Ref Linking
 			if isRef {
 				childRefName := resolve(schemaProxy)
-				code += fmt.Sprintf("\n	%s: `%s`;", prop.Key, childRefName)
+				childSchemaName := strings.Replace(childRefName, "#/components/schemas/", "", 1)
+				imports += fmt.Sprintf("import { %s } from './%s';\n", childSchemaName, childSchemaName)
+				code += fmt.Sprintf("\n	%s: %s;", prop.Key, childSchemaName)
 				continue
 			}
 			schema := schemaProxy.Schema()
@@ -76,7 +79,7 @@ func GenSchema(schema *base.SchemaProxy, resolve ResolveSchemaRef) (fileName str
 		// fmt.Printf("RESOLVED: %+v\n", resolve(m.Value("id")))
 		// fmt.Printf("description (%s): %+v\n", m.Value("description").GetReference(), m.Value("description").Schema())
 		code += "\n}"
-		content = []byte(code)
+		content = []byte(imports + "\n" + code)
 		// fmt.Printf("GEN (%s): %s\n", fileName, code)
 	case "integer":
 		content = []byte(fmt.Sprintf("export type %s = number & {}", schemaName))
