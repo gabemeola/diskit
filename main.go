@@ -1,0 +1,126 @@
+package main
+
+import (
+	"fmt"
+	"log"
+	"os"
+	"path/filepath"
+	"sync"
+
+	"github.com/gabemeola/diskit/ast"
+	"github.com/gabemeola/diskit/typescript"
+	"github.com/pb33f/libopenapi"
+	"github.com/pb33f/libopenapi/datamodel/high/base"
+)
+
+var initialSchemasToGen = map[string]*base.SchemaProxy{}
+
+func main() {
+	file, err := os.ReadFile("openapi.json")
+	invariantErr(err, "error reading file")
+
+	doc, err := libopenapi.NewDocument(file)
+	invariantErr(err, "error creating document")
+	model, errs := doc.BuildV3Model()
+	if len(errs) > 0 {
+		for _, err := range errs {
+			fmt.Printf("error: %e\n", err)
+		}
+		panic(
+			fmt.Sprintf("cannot create v3 model from document: %d errors reported", len(errs)),
+		)
+	}
+
+	paths := model.Model.Paths.PathItems.Len()
+	schemas := model.Model.Components.Schemas.Len()
+
+	// print the number of paths and schemas in the document
+	fmt.Printf("There are %d paths and %d schemas in the document\n", paths, schemas)
+
+	path, ok := model.Model.Paths.PathItems.Get("/oauth2/applications/@me")
+	if !ok {
+		log.Panicf("unable to load path")
+	}
+	PrettyPrint(path)
+	refSchema := path.Get.Responses.FindResponseByCode(200).Content.First().Value().Schema
+	schemaRefName := refSchema.GetReference()
+	schema := refSchema.Schema()
+	fmt.Printf("%s: %+v\n", schemaRefName, schema)
+	initialSchemasToGen[schemaRefName] = refSchema
+
+	// fmt.Printf("%+v\n", refSchema.GetReferenceOrigin())
+	// schema = strings.Replace(schema, "#/components/schemas/", "", 1)
+	// comp, ok := model.Model.Components.Schemas.Get(schema)
+	// if !ok {
+	// 	log.Panicf("unable to load schema: %s", schema)
+	// }
+	// n := comp.GetReference()
+	// fmt.Printf("%+v\n", n)
+	// b, _ := schema.Render()
+	// println(string(b))
+	// PrettyPrint(schema)
+
+	f := ast.Function{
+		Name:       "test",
+		Comment:    "Really Cool Test Function",
+		ReturnType: ast.TypeString,
+		Params:     []ast.FunctionParam{},
+	}
+
+	data := typescript.GenFunction(f)
+	err = os.WriteFile("tmp/test.ts", []byte(data), os.ModePerm)
+	invariantErr(err, "error writing file")
+
+	schemaGenCh := make(chan struct {
+		string
+		*base.SchemaProxy
+	}, 100)
+	wg := sync.WaitGroup{}
+
+	resolveSchemaRef := func(schema *base.SchemaProxy) string {
+		wg.Add(1)
+		refName := schema.GetReference()
+		// s := schema.Schema()
+		// initialSchemasToGen[schemaRefName] = refSchema
+		schemaGenCh <- struct {
+			string
+			*base.SchemaProxy
+		}{refName, schema}
+		return refName
+	}
+
+	go func() {
+		// for {
+		// 	select {
+		// 	case schema, ok := <-schemaGenCh:
+		// 		// schema.string
+		// 	}
+		// }
+
+		for schema := range schemaGenCh {
+			fileName, data := typescript.GenSchema(schema.SchemaProxy, resolveSchemaRef)
+			err = os.WriteFile(filepath.Join("tmp", "schema", fileName), data, os.ModePerm)
+			if err != nil {
+				log.Printf("error writing %s: %s", schema.GetReference(), err)
+			}
+			wg.Done()
+		}
+
+	}()
+
+	for refName, schema := range initialSchemasToGen {
+		wg.Add(1)
+		schemaGenCh <- struct {
+			string
+			*base.SchemaProxy
+		}{refName, schema}
+	}
+
+	wg.Wait()
+}
+
+func invariantErr(err error, message string) {
+	if err != nil {
+		log.Panicf("%s: %s", message, err)
+	}
+}
