@@ -1,7 +1,9 @@
 import { PrivateApplicationResponse } from '../schema/PrivateApplicationResponse';
 
 
-export class GetMyOauth2ApplicationRequest extends Request {}
+export class GetMyOauth2ApplicationRequest extends Request {
+	method: 'GET';
+}
 
 declare module '../diskit.ts' {
   interface DiskitClient {
@@ -10,7 +12,5 @@ declare module '../diskit.ts' {
 }
 	
 export function getMyOauth2Application(): GetMyOauth2ApplicationRequest {
-	return new GetMyOauth2ApplicationRequest(`https://discord.com/api/v10/oauth2/applications/@me`, {
-		method: 'GET',
-	});
+	return new GetMyOauth2ApplicationRequest(`https://discord.com/api/v10/oauth2/applications/@me`);
 }

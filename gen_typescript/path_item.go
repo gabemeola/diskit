@@ -47,7 +47,9 @@ func GenPathItem(pathUrl string, pathItem *v3.PathItem, resolve ResolveSchemaRef
 
 	reqClassName := lo.PascalCase(id + "Request")
 	declarationCode := fmt.Sprintf(`
-export class %s extends Request {}
+export class %s extends Request {
+	method: 'GET';
+}
 
 declare module '../diskit.ts' {
   interface DiskitClient {
@@ -74,9 +76,7 @@ declare module '../diskit.ts' {
 
 	code += fmt.Sprintf(
 		`
-	return new %s(%s, {
-		method: 'GET',
-	});`,
+	return new %s(%s);`,
 		reqClassName,
 		urlCode)
 

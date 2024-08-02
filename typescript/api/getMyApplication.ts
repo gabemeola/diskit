@@ -1,7 +1,9 @@
 import { PrivateApplicationResponse } from '../schema/PrivateApplicationResponse';
 
 
-export class GetMyApplicationRequest extends Request {}
+export class GetMyApplicationRequest extends Request {
+	method: 'GET';
+}
 
 declare module '../diskit.ts' {
   interface DiskitClient {
@@ -10,7 +12,5 @@ declare module '../diskit.ts' {
 }
 	
 export function getMyApplication(): GetMyApplicationRequest {
-	return new GetMyApplicationRequest(`https://discord.com/api/v10/applications/@me`, {
-		method: 'GET',
-	});
+	return new GetMyApplicationRequest(`https://discord.com/api/v10/applications/@me`);
 }
