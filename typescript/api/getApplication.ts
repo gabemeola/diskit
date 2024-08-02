@@ -9,7 +9,7 @@ declare module '../diskit.ts' {
   }
 }
 	
-export function get_application(application_id: string): GetApplicationRequest {
+export function getApplication(application_id: string): GetApplicationRequest {
 	return new GetApplicationRequest(`https://discord.com/api/v10/applications/${application_id}`, {
 		method: 'GET',
 	});

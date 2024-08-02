@@ -22,6 +22,7 @@ func GenPathItem(pathUrl string, pathItem *v3.PathItem, resolve ResolveSchemaRef
 	}
 	id := op.OperationId
 	log.Printf("Generating API: %s", id)
+	id = lo.CamelCase(id)
 	resSchema := op.Responses.FindResponseByCode(200).Content.First().Value().Schema
 	childRefName := resolve(resSchema)
 	childSchemaName := strings.Replace(childRefName, "#/components/schemas/", "", 1)
@@ -81,5 +82,6 @@ declare module '../diskit.ts' {
 
 	code += "\n}"
 
-	return id + ".ts", []byte(imports + "\n" + declarationCode + "\n" + code)
+	fileName = id + ".ts"
+	return fileName, []byte(imports + "\n" + declarationCode + "\n" + code)
 }

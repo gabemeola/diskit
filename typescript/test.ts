@@ -1,6 +1,6 @@
 import { DiskitClient } from './diskit'
-import { get_my_user } from './api/get_my_user'
-import { get_application } from './api/get_application';
+import { getMyUser } from './api/getMyUser'
+import { getApplication } from './api/getApplication';
 
 const client = new DiskitClient({
   headers: {
@@ -10,9 +10,9 @@ const client = new DiskitClient({
 
 async function test() {
   const appId = "123";
-  const data = await client.request(get_application(appId));
+  const data = await client.request(getApplication(appId));
   data.owner.id
-  const data2 = await client.request(get_my_user())
+  const data2 = await client.request(getMyUser())
   // const data2 = await client.request('nice')
   // client.something()
 }

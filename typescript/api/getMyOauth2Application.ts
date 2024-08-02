@@ -9,7 +9,7 @@ declare module '../diskit.ts' {
   }
 }
 	
-export function get_my_oauth2_application(): GetMyOauth2ApplicationRequest {
+export function getMyOauth2Application(): GetMyOauth2ApplicationRequest {
 	return new GetMyOauth2ApplicationRequest(`https://discord.com/api/v10/oauth2/applications/@me`, {
 		method: 'GET',
 	});
