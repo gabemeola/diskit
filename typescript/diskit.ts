@@ -1,7 +1,3 @@
-interface ClientResponses {
-  Request: unknown
-}
-
 export interface DiskitClient {
   request(request: Request): Promise<unknown>
 }
