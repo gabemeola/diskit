@@ -26,7 +26,7 @@ func GenPathItem(pathUrl string, pathItem *v3.PathItem, resolve ResolveSchemaRef
 	childSchemaName := strings.Replace(childRefName, "#/components/schemas/", "", 1)
 	// strings.
 	foundUrlArgs := urlArgsRegx.FindAllString(pathUrl, -1)
-	fmt.Printf("FOUND: %+v\n", foundUrlArgs)
+	// fmt.Printf("FOUND: %+v\n", foundUrlArgs)
 	params := []string{}
 	if len(foundUrlArgs) > 0 {
 		for _, param := range foundUrlArgs {
