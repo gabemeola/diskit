@@ -49,6 +49,12 @@ func GenPathItem(pathUrl string, pathItem *v3.PathItem, resolve ResolveSchemaRef
 	declarationCode := fmt.Sprintf(`
 export class %s extends Request {
 	method: 'GET';
+  // Need to have some unique item on the class
+	// otherwise Typescript will consider the some Request equal
+	// since it is structural typing instead of nominal.
+	// https://github.com/microsoft/TypeScript/issues/8168
+	// I could use a type alias to get around this but a class might be useful for other things.
+	operation: '%s';
 }
 
 declare module '../diskit.ts' {
@@ -56,7 +62,12 @@ declare module '../diskit.ts' {
     request(request: %s): Promise<%s>
   }
 }
-	`, reqClassName, reqClassName, childSchemaName)
+	`,
+		reqClassName,
+		op.OperationId,
+		reqClassName,
+		childSchemaName,
+	)
 
 	code := fmt.Sprintf(
 		`export function %s(%s): %s {`,
