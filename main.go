@@ -15,6 +15,16 @@ import (
 
 var initialSchemasToGen = map[string]*base.SchemaProxy{}
 
+var pathToGen = []string{
+	// TODO: Needs to support `type` in response schema
+	// "/users/@me/connections",
+	// "/users/@me",
+	// "/oauth2/applications/@me",
+	// "/applications/@me",
+	// TODO: Support url params
+	"/applications/{application_id}",	
+}
+
 func main() {
 	file, err := os.ReadFile("openapi.json")
 	invariantErr(err, "error reading file")
@@ -37,17 +47,17 @@ func main() {
 	// print the number of paths and schemas in the document
 	fmt.Printf("There are %d paths and %d schemas in the document\n", paths, schemas)
 
-	pathUrl := "/oauth2/applications/@me"
-	path, ok := model.Model.Paths.PathItems.Get(pathUrl)
-	if !ok {
-		log.Panicf("unable to load path")
-	}
-	PrettyPrint(path)
-	refSchema := path.Get.Responses.FindResponseByCode(200).Content.First().Value().Schema
-	schemaRefName := refSchema.GetReference()
+	// pathUrl := "/oauth2/applications/@me"
+	// path, ok := model.Model.Paths.PathItems.Get(pathUrl)
+	// if !ok {
+	// 	log.Panicf("unable to load path")
+	// }
+	// PrettyPrint(path)
+	// refSchema := path.Get.Responses.FindResponseByCode(200).Content.First().Value().Schema
+	// schemaRefName := refSchema.GetReference()
 	// schema := refSchema.Schema()
 	// fmt.Printf("%s: %+v\n", schemaRefName, schema)
-	initialSchemasToGen[schemaRefName] = refSchema
+	// initialSchemasToGen[schemaRefName] = refSchema
 
 	// fmt.Printf("%+v\n", refSchema.GetReferenceOrigin())
 	// schema = strings.Replace(schema, "#/components/schemas/", "", 1)
@@ -129,9 +139,17 @@ func main() {
 	}
 
 	// Gen API
-	fileName, content := typescript.GenPathItem(pathUrl, path, resolveSchemaRef)
-	err = os.WriteFile(filepath.Join("tmp", "api", fileName), content, os.ModePerm)
-	invariantErr(err, "error writing file")
+	for _, pathUrl := range pathToGen {
+		path, ok := model.Model.Paths.PathItems.Get(pathUrl)
+		if !ok {
+			log.Panicf("unable to load path")
+		}
+		fmt.Printf("GENERATING PATH: %s\n", pathUrl)
+		PrettyPrint(path)
+		fileName, content := typescript.GenPathItem(pathUrl, path, resolveSchemaRef)
+		err = os.WriteFile(filepath.Join("tmp", "api", fileName), content, os.ModePerm)
+		invariantErr(err, "error writing file for: "+pathUrl)
+	}
 
 	wg.Wait()
 	close(schemaGenCh)
