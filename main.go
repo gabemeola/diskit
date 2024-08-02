@@ -8,7 +8,7 @@ import (
 	"sync"
 
 	"github.com/gabemeola/diskit/ast"
-	"github.com/gabemeola/diskit/typescript"
+	typescript "github.com/gabemeola/diskit/gen_typescript"
 	"github.com/pb33f/libopenapi"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 )
