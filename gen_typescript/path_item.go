@@ -43,11 +43,22 @@ func GenPathItem(pathUrl string, pathItem *v3.PathItem, resolve ResolveSchemaRef
 	imports := ""
 	imports += fmt.Sprintf("import { %s } from '../schema/%s';\n", childSchemaName, childSchemaName)
 
+	reqClassName := id + "Request"
+	declarationCode := fmt.Sprintf(`
+export class %s extends Request {}
+
+declare module '../diskit.ts' {
+  interface DiskitClient {
+    request(request: %s): Promise<%s>
+  }
+}
+	`, reqClassName, reqClassName, childSchemaName)
+
 	code := fmt.Sprintf(
-		`export async function %s(%s): Promise<%s> {`,
+		`export function %s(%s): %s {`,
 		id,
 		paramsCode,
-		childSchemaName,
+		reqClassName,
 	)
 
 	urlCode := rootUrl + pathUrl
@@ -61,11 +72,13 @@ func GenPathItem(pathUrl string, pathItem *v3.PathItem, resolve ResolveSchemaRef
 
 	code += fmt.Sprintf(
 		`
-	const res = await fetch(%s);
-	return await res.json();`,
+	return new %s(%s, {
+		method: 'GET',
+	});`,
+		reqClassName,
 		urlCode)
 
 	code += "\n}"
 
-	return id + ".ts", []byte(imports + "\n" + code)
+	return id + ".ts", []byte(imports + "\n" + declarationCode + "\n" + code)
 }

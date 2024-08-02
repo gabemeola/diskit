@@ -20,10 +20,10 @@ var pathToGen = []string{
 	// "/users/@me/connections",
 	// TODO: Support other ops outside of GET
 	"/users/@me",
-	"/oauth2/applications/@me",
-	"/applications/@me",
+	// "/oauth2/applications/@me",
+	// "/applications/@me",
 	// TODO: Support url params
-	"/applications/{application_id}",	
+	// "/applications/{application_id}",	
 }
 
 func main() {
@@ -121,7 +121,7 @@ func main() {
 			}
 			processedSchemas[refName] = struct{}{}
 			fileName, data := typescript.GenSchema(schema.SchemaProxy, resolveSchemaRef)
-			err = os.WriteFile(filepath.Join("tmp", "schema", fileName), data, os.ModePerm)
+			err = os.WriteFile(filepath.Join("typescript", "schema", fileName), data, os.ModePerm)
 			if err != nil {
 				log.Printf("error writing %s: %s", schema.GetReference(), err)
 			}
@@ -148,7 +148,7 @@ func main() {
 		fmt.Printf("GENERATING PATH: %s\n", pathUrl)
 		PrettyPrint(path)
 		fileName, content := typescript.GenPathItem(pathUrl, path, resolveSchemaRef)
-		err = os.WriteFile(filepath.Join("tmp", "api", fileName), content, os.ModePerm)
+		err = os.WriteFile(filepath.Join("typescript", "api", fileName), content, os.ModePerm)
 		invariantErr(err, "error writing file for: "+pathUrl)
 	}
 
