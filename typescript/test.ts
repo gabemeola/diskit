@@ -4,6 +4,7 @@ import { getApplication } from './api/getApplication';
 
 const client = new DiskitClient({
   headers: {
+    // TODO: You'll need to update auth after a request in non bot cases
     Authorization: "Bot 12345",
   },
 });
