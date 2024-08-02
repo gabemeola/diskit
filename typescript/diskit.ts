@@ -1,14 +1,16 @@
 export interface DiskitClient {
-  request(request: Request): Promise<unknown>
+  request(request: Request): Promise<unknown>;
 }
 
-
 export class DiskitClient {
-  constructor(private cfg: { headers: HeadersInit }) {}
+  private headers: Headers;
+  constructor(cfg: { headers: HeadersInit }) {
+    this.headers = new Headers(cfg.headers);
+  }
 
   public async request(request: Request): Promise<unknown> {
     return await fetch(request, {
-      headers: this.cfg.headers,
+      headers: this.headers,
     });
   }
 }
