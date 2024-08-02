@@ -1,16 +1,16 @@
 import { UserPIIResponse } from '../schema/UserPIIResponse';
 
 
-export class get_my_userRequest extends Request {}
+export class GetMyUserRequest extends Request {}
 
 declare module '../diskit.ts' {
   interface DiskitClient {
-    request(request: get_my_userRequest): Promise<UserPIIResponse>
+    request(request: GetMyUserRequest): Promise<UserPIIResponse>
   }
 }
 	
-export function get_my_user(): get_my_userRequest {
-	return new get_my_userRequest(`https://discord.com/api/v10/users/@me`, {
+export function get_my_user(): GetMyUserRequest {
+	return new GetMyUserRequest(`https://discord.com/api/v10/users/@me`, {
 		method: 'GET',
 	});
 }

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
+	"github.com/samber/lo"
 )
 
 const rootUrl = "https://discord.com/api/v10"
@@ -43,7 +44,7 @@ func GenPathItem(pathUrl string, pathItem *v3.PathItem, resolve ResolveSchemaRef
 	imports := ""
 	imports += fmt.Sprintf("import { %s } from '../schema/%s';\n", childSchemaName, childSchemaName)
 
-	reqClassName := id + "Request"
+	reqClassName := lo.PascalCase(id + "Request")
 	declarationCode := fmt.Sprintf(`
 export class %s extends Request {}
 
