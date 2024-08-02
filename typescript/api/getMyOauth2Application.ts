@@ -7,7 +7,9 @@ export class GetMyOauth2ApplicationRequest extends Request {
 	// otherwise Typescript will consider the some Request equal
 	// since it is structural typing instead of nominal.
 	// https://github.com/microsoft/TypeScript/issues/8168
+	//
 	// I could use a type alias to get around this but a class might be useful for other things.
+	// Point for type alias is it is more lightweight on memory (but might not be a non-issue).
 	operation: 'get_my_oauth2_application';
 }
 
