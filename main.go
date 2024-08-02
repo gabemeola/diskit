@@ -37,7 +37,8 @@ func main() {
 	// print the number of paths and schemas in the document
 	fmt.Printf("There are %d paths and %d schemas in the document\n", paths, schemas)
 
-	path, ok := model.Model.Paths.PathItems.Get("/oauth2/applications/@me")
+	pathUrl := "/oauth2/applications/@me"
+	path, ok := model.Model.Paths.PathItems.Get(pathUrl)
 	if !ok {
 		log.Panicf("unable to load path")
 	}
@@ -128,7 +129,7 @@ func main() {
 	}
 
 	// Gen API
-	fileName, content := typescript.GenPathItem(path, resolveSchemaRef)
+	fileName, content := typescript.GenPathItem(pathUrl, path, resolveSchemaRef)
 	err = os.WriteFile(filepath.Join("tmp", "api", fileName), content, os.ModePerm)
 	invariantErr(err, "error writing file")
 

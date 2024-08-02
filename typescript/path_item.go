@@ -8,8 +8,10 @@ import (
 	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
 )
 
-func GenPathItem(path *v3.PathItem, resolve ResolveSchemaRef) (fileName string, content []byte) {
-	op := path.Get
+const rootUrl = "https://discord.com/api/v10"
+
+func GenPathItem(pathUrl string, pathItem *v3.PathItem, resolve ResolveSchemaRef) (fileName string, content []byte) {
+	op := pathItem.Get
 	if op == nil {
 		// TODO: Support other CRUD operations
 		return
@@ -24,10 +26,16 @@ func GenPathItem(path *v3.PathItem, resolve ResolveSchemaRef) (fileName string, 
 	imports += fmt.Sprintf("import { %s } from '../schema/%s';\n", childSchemaName, childSchemaName)
 
 	code := fmt.Sprintf(
-		`export function %s(): %s {`,
+		`export async function %s(): Promise<%s> {`,
 		id,
 		childSchemaName,
 	)
+	code += fmt.Sprintf(
+		`
+	const res = await fetch('%s');
+	return await res.json();`,
+		rootUrl + pathUrl)
+
 	code += "\n}"
 
 	return id + ".ts", []byte(imports + "\n" + code)
