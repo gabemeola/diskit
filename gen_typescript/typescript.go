@@ -51,6 +51,7 @@ func GenSchema(schema *base.SchemaProxy, resolve ResolveSchemaRef) (fileName str
 		content = []byte(fmt.Sprintf("export type %s = string & {}", schemaName))
 	case "object":
 		imports := ""
+		// TODO: Change to interface. Better for TS perf
 		code := fmt.Sprintf("export type %s = {", schemaName)
 		for prop := s.Properties.OrderedMap.Oldest(); prop != nil; prop = prop.Next() {
 			schemaProxy := prop.Value

@@ -30,6 +30,8 @@ func GenPathItem(pathUrl string, pathItem *v3.PathItem, resolve ResolveSchemaRef
 		switch key {
 		case "get":
 			results = append(results, GenGetRequest(pathUrl, op, resolve))
+		case "patch":
+			results = append(results, GenPatchRequest(pathUrl, op, resolve))
 		// TODO: Support other CRUD operations
 		default:
 			log.Printf("Unsupported op `%s` for: %s", key, pathUrl)
@@ -41,7 +43,39 @@ func GenPathItem(pathUrl string, pathItem *v3.PathItem, resolve ResolveSchemaRef
 
 func GenGetRequest(pathUrl string, op *v3.Operation, resolve ResolveSchemaRef) *PathItemResult {
 	id := op.OperationId
-	log.Printf("Generating API: %s", id)
+	log.Printf("Generating OP: %s", id)
+	code := GenOpRequestCode(pathUrl, op, resolve, "")
+
+	fileName := lo.CamelCase(id) + ".ts"
+	return &PathItemResult{
+		FileName: fileName,
+		Content:  code,
+	}
+}
+
+func GenPatchRequest(pathUrl string, op *v3.Operation, resolve ResolveSchemaRef) *PathItemResult {
+	id := op.OperationId
+	log.Printf("Generating OP: %s", id)
+	reqBody := op.RequestBody
+	reqBodySchema := reqBody.Content.First().Value().Schema
+	reqBodyRef := resolve(reqBodySchema)
+	reqBodySchemaName := strings.Replace(reqBodyRef, "#/components/schemas/", "", 1)
+	code := GenOpRequestCode(pathUrl, op, resolve, reqBodySchemaName)
+
+	fileName := lo.CamelCase(id) + ".ts"
+	return &PathItemResult{
+		FileName: fileName,
+		Content:  code,
+	}
+}
+
+func GenOpRequestCode(
+	pathUrl string,
+	op *v3.Operation,
+	resolve ResolveSchemaRef,
+	reqBodySchemaName string,
+) []byte {
+	id := op.OperationId
 	id = lo.CamelCase(id)
 	resSchema := op.Responses.FindResponseByCode(200).Content.First().Value().Schema
 	childRefName := resolve(resSchema)
@@ -61,9 +95,15 @@ func GenGetRequest(pathUrl string, op *v3.Operation, resolve ResolveSchemaRef) *
 	for _, param := range params {
 		paramsCode += fmt.Sprintf("%s: string", param)
 	}
+	if reqBodySchemaName != "" {
+		paramsCode += fmt.Sprintf("body: %s", reqBodySchemaName)
+	}
 
 	imports := ""
 	imports += fmt.Sprintf("import { %s } from '../schema/%s';\n", childSchemaName, childSchemaName)
+	if reqBodySchemaName != "" {
+		imports += fmt.Sprintf("import { %s } from '../schema/%s';\n", reqBodySchemaName, reqBodySchemaName)
+	}
 
 	reqClassName := lo.PascalCase(id + "Request")
 	declarationCode := fmt.Sprintf(`
@@ -107,17 +147,22 @@ declare module '../diskit.ts' {
 	// url = strings.ReplaceAll(url, )
 	// }
 
+	bodyCode := ""
+	if reqBodySchemaName != "" {
+		bodyCode = `, {
+		body: JSON.stringify(body)
+	}`
+	}
+
 	code += fmt.Sprintf(
 		`
-	return new %s(%s);`,
+	return new %s(%s%s);`,
 		reqClassName,
-		urlCode)
+		urlCode,
+		bodyCode,
+	)
 
 	code += "\n}"
 
-	fileName := id + ".ts"
-	return &PathItemResult{
-		FileName: fileName,
-		Content:  []byte(imports + "\n" + declarationCode + "\n" + code),
-	}
+	return []byte(imports + "\n" + declarationCode + "\n" + code)
 }

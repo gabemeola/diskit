@@ -21,16 +21,16 @@ var pathToGen = []string{
 	// "/users/@me/connections",
 	// TODO: Support other ops outside of GET
 	"/users/@me",
-	"/oauth2/applications/@me",
-	"/applications/@me",
-	"/applications/{application_id}",
+	// "/oauth2/applications/@me",
+	// "/applications/@me",
+	// "/applications/{application_id}",
 }
 
 func main() {
 	start := time.Now()
 	defer func() {
 		duration := time.Since(start)
-		log.Printf("Generated in %fs or %d microseconds", duration.Seconds(), duration.Microseconds())
+		log.Printf("Generated in %fs", duration.Seconds())
 	}()
 	file, err := os.ReadFile("openapi.json")
 	invariantErr(err, "error reading file")
