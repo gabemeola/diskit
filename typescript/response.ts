@@ -7,6 +7,11 @@ export type TypedResponse<T extends StatusResponseMap> = ResponseWithoutJson &
   (
     {
         [Status in keyof T]: {
+          // TODO: There is some fancy way to do "type hints" but I'm forgetting
+          // Currently this says the status code could be "200 | 500", but technically
+          // it could be any number since multiple servers may proxy.
+          // I'd like this to say `number | 200 | 500` *without* widening the type
+          // to just `number` with `any` for json().
           status: Status;
         } & T[Status];
       }[keyof T]
