@@ -1,3 +1,4 @@
+import { TypedResponse } from '../response';
 import { UserPIIResponse } from '../schema/UserPIIResponse';
 import { BotAccountPatchRequest } from '../schema/BotAccountPatchRequest';
 
@@ -14,9 +15,16 @@ export class UpdateMyUserRequest extends Request {
 	operation: 'update_my_user';
 }
 
+export type UpdateMyUserResponse = TypedResponse<{
+	200: {
+		ok: true,
+		json(): Promise<UserPIIResponse>
+	},
+}>
+
 declare module '../diskit.ts' {
   interface DiskitClient {
-    request(request: UpdateMyUserRequest): Promise<UserPIIResponse>
+    request(request: UpdateMyUserRequest): Promise<UpdateMyUserResponse>
   }
 }
 	

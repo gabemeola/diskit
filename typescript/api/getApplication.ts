@@ -1,3 +1,4 @@
+import { TypedResponse } from '../response';
 import { PrivateApplicationResponse } from '../schema/PrivateApplicationResponse';
 
 
@@ -13,9 +14,16 @@ export class GetApplicationRequest extends Request {
 	operation: 'get_application';
 }
 
+export type GetApplicationResponse = TypedResponse<{
+	200: {
+		ok: true,
+		json(): Promise<PrivateApplicationResponse>
+	},
+}>
+
 declare module '../diskit.ts' {
   interface DiskitClient {
-    request(request: GetApplicationRequest): Promise<PrivateApplicationResponse>
+    request(request: GetApplicationRequest): Promise<GetApplicationResponse>
   }
 }
 	

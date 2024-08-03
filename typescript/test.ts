@@ -21,9 +21,14 @@ async function test() {
 
 
   const appId = "123";
-  const app = await client.request(getApplication(appId));
-  app.owner.id;
-  const user = await client.request(getMyUser());
+  const appRes = await client.request(getApplication(appId));
+  appRes.json()
+  if (appRes.status === 200) {
+    const app = await appRes.json()
+    app.owner.id;
+  }
+  const userRes = await client.request(getMyUser());
+  const user = await userRes.json()
   user.username;
   // const data2 = await client.request('nice')
   // client.something()

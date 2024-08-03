@@ -1,3 +1,4 @@
+import { TypedResponse } from '../response';
 import { PrivateApplicationResponse } from '../schema/PrivateApplicationResponse';
 
 
@@ -13,9 +14,16 @@ export class GetMyOauth2ApplicationRequest extends Request {
 	operation: 'get_my_oauth2_application';
 }
 
+export type GetMyOauth2ApplicationResponse = TypedResponse<{
+	200: {
+		ok: true,
+		json(): Promise<PrivateApplicationResponse>
+	},
+}>
+
 declare module '../diskit.ts' {
   interface DiskitClient {
-    request(request: GetMyOauth2ApplicationRequest): Promise<PrivateApplicationResponse>
+    request(request: GetMyOauth2ApplicationRequest): Promise<GetMyOauth2ApplicationResponse>
   }
 }
 	

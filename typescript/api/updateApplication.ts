@@ -1,3 +1,4 @@
+import { TypedResponse } from '../response';
 import { PrivateApplicationResponse } from '../schema/PrivateApplicationResponse';
 import { ApplicationFormPartial } from '../schema/ApplicationFormPartial';
 
@@ -14,9 +15,16 @@ export class UpdateApplicationRequest extends Request {
 	operation: 'update_application';
 }
 
+export type UpdateApplicationResponse = TypedResponse<{
+	200: {
+		ok: true,
+		json(): Promise<PrivateApplicationResponse>
+	},
+}>
+
 declare module '../diskit.ts' {
   interface DiskitClient {
-    request(request: UpdateApplicationRequest): Promise<PrivateApplicationResponse>
+    request(request: UpdateApplicationRequest): Promise<UpdateApplicationResponse>
   }
 }
 	

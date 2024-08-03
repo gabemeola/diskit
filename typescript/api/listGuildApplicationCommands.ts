@@ -1,3 +1,4 @@
+import { TypedResponse } from '../response';
 import { ListGuildApplicationCommandsSchema } from '../schema/ListGuildApplicationCommandsSchema';
 
 
@@ -13,9 +14,16 @@ export class ListGuildApplicationCommandsRequest extends Request {
 	operation: 'list_guild_application_commands';
 }
 
+export type ListGuildApplicationCommandsResponse = TypedResponse<{
+	200: {
+		ok: true,
+		json(): Promise<ListGuildApplicationCommandsSchema>
+	},
+}>
+
 declare module '../diskit.ts' {
   interface DiskitClient {
-    request(request: ListGuildApplicationCommandsRequest): Promise<ListGuildApplicationCommandsSchema>
+    request(request: ListGuildApplicationCommandsRequest): Promise<ListGuildApplicationCommandsResponse>
   }
 }
 	

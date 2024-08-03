@@ -94,6 +94,8 @@ func GenOpRequestCode(
 			params = append(params, param)
 		}
 	}
+	// TODO: Support Query Params as well
+	// Probably best to put these in an object.
 	paramsCode := ""
 	for i, param := range params {
 		if i > 0 {
@@ -109,12 +111,14 @@ func GenOpRequestCode(
 	}
 
 	imports := ""
+	imports += "import { TypedResponse } from '../response';\n"
 	imports += fmt.Sprintf("import { %s } from '../schema/%s';\n", childSchemaName, childSchemaName)
 	if reqBodySchemaName != "" {
 		imports += fmt.Sprintf("import { %s } from '../schema/%s';\n", reqBodySchemaName, reqBodySchemaName)
 	}
 
 	reqClassName := lo.PascalCase(id + "Request")
+	responseTypeName := lo.PascalCase(id + "Response")
 	declarationCode := fmt.Sprintf(`
 export class %s extends Request {
 	method: '%s';
@@ -128,6 +132,13 @@ export class %s extends Request {
 	operation: '%s';
 }
 
+export type %s = TypedResponse<{
+	200: {
+		ok: true,
+		json(): Promise<%s>
+	},
+}>
+
 declare module '../diskit.ts' {
   interface DiskitClient {
     request(request: %s): Promise<%s>
@@ -137,8 +148,10 @@ declare module '../diskit.ts' {
 		reqClassName,
 		opType,
 		op.OperationId,
-		reqClassName,
+		responseTypeName,
 		childSchemaName,
+		reqClassName,
+		responseTypeName,
 	)
 
 	code := fmt.Sprintf(

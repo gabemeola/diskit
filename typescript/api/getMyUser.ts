@@ -1,3 +1,4 @@
+import { TypedResponse } from '../response';
 import { UserPIIResponse } from '../schema/UserPIIResponse';
 
 
@@ -13,9 +14,16 @@ export class GetMyUserRequest extends Request {
 	operation: 'get_my_user';
 }
 
+export type GetMyUserResponse = TypedResponse<{
+	200: {
+		ok: true,
+		json(): Promise<UserPIIResponse>
+	},
+}>
+
 declare module '../diskit.ts' {
   interface DiskitClient {
-    request(request: GetMyUserRequest): Promise<UserPIIResponse>
+    request(request: GetMyUserRequest): Promise<GetMyUserResponse>
   }
 }
 	
