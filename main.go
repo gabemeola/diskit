@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 
@@ -12,9 +13,9 @@ import (
 	typescript "github.com/gabemeola/diskit/gen_typescript"
 	"github.com/pb33f/libopenapi"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
+	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
+	"github.com/samber/lo"
 )
-
-var initialSchemasToGen = map[string]*base.SchemaProxy{}
 
 var pathToGen = []string{
 	// TODO: Needs to support `type` in response schema
@@ -24,6 +25,8 @@ var pathToGen = []string{
 	"/oauth2/applications/@me",
 	"/applications/@me",
 	"/applications/{application_id}",
+	"/applications/{application_id}/guilds/{guild_id}/commands",
+	// "/guilds",
 }
 
 func main() {
@@ -90,20 +93,27 @@ func main() {
 
 	schemaGenCh := make(chan struct {
 		string
+		*v3.Operation
 		*base.SchemaProxy
 	}, 100)
 	wg := sync.WaitGroup{}
 
-	resolveSchemaRef := func(schema *base.SchemaProxy) string {
+	resolveSchemaRef := func(op *v3.Operation, schema *base.SchemaProxy) string {
 		wg.Add(1)
-		refName := schema.GetReference()
+		schemaName := schema.GetReference()
+		if schemaName == "" {
+			schemaName = lo.PascalCase(op.OperationId) + "Schema"
+		} else {
+			schemaName = strings.Replace(schemaName, "#/components/schemas/", "", 1)
+		}
 		// s := schema.Schema()
 		// initialSchemasToGen[schemaRefName] = refSchema
 		schemaGenCh <- struct {
 			string
+			*v3.Operation
 			*base.SchemaProxy
-		}{refName, schema}
-		return refName
+		}{schemaName, op, schema}
+		return schemaName
 	}
 
 	// Process new Schemas in Queue
@@ -125,7 +135,7 @@ func main() {
 				continue
 			}
 			processedSchemas[refName] = struct{}{}
-			fileName, data := typescript.GenSchema(schema.SchemaProxy, resolveSchemaRef)
+			fileName, data := typescript.GenSchema(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaRef)
 			err = os.WriteFile(filepath.Join("typescript", "schema", fileName), data, os.ModePerm)
 			if err != nil {
 				log.Printf("error writing %s: %s", schema.GetReference(), err)
@@ -134,15 +144,6 @@ func main() {
 		}
 
 	}()
-
-	// Gen Initial Schemas
-	for refName, schema := range initialSchemasToGen {
-		wg.Add(1)
-		schemaGenCh <- struct {
-			string
-			*base.SchemaProxy
-		}{refName, schema}
-	}
 
 	// Gen API
 	for _, pathUrl := range pathToGen {

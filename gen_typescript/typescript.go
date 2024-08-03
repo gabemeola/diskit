@@ -7,6 +7,7 @@ import (
 
 	"github.com/gabemeola/diskit/ast"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
+	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
 )
 
 func GenFunction(f ast.Function) string {
@@ -31,19 +32,24 @@ func mapType(t ast.Type) string {
 }
 
 // Resolves a Schema Ref and returns back the canonical name
-type ResolveSchemaRef = func(schema *base.SchemaProxy) string
+type ResolveSchemaRef = func(op *v3.Operation, schema *base.SchemaProxy) string
 
-func GenSchema(schema *base.SchemaProxy, resolve ResolveSchemaRef) (fileName string, content []byte) {
-	refName := schema.GetReference()
-	log.Printf("Generating Schema: %s", refName)
+func GenSchema(
+	schemaName string,
+	op *v3.Operation,
+	schema *base.SchemaProxy,
+	resolve ResolveSchemaRef,
+) (fileName string, content []byte) {
+	log.Printf("Generating Schema: %s", schemaName)
+	// fmt.Printf("%+v\n", s)
 	s := schema.Schema()
 	schemaTypes := s.Type
-	if len(schemaTypes) != 1 {
-		log.Panicf("expected schema type (%s) to contain 1 item. Got: %+v", refName, schemaTypes)
-	}
+	// if len(schemaTypes) != 1 {
+	// 	log.Panicf("expected schema type (%s) to contain 1 item. Got: %+v", refName, schemaTypes)
+	// }
+	// TODO: Need to support multi schema types like ["array", "null"]
 	schemaType := schemaTypes[0]
 	// fmt.Printf("TYPE: %+v\n", schemaType)
-	schemaName := strings.Replace(refName, "#/components/schemas/", "", 1)
 	fileName = schemaName + ".ts"
 
 	switch schemaType {
@@ -59,7 +65,7 @@ func GenSchema(schema *base.SchemaProxy, resolve ResolveSchemaRef) (fileName str
 			isRef := refName != ""
 			// Handle Ref Linking
 			if isRef {
-				childRefName := resolve(schemaProxy)
+				childRefName := resolve(op, schemaProxy)
 				childSchemaName := strings.Replace(childRefName, "#/components/schemas/", "", 1)
 				imports += fmt.Sprintf("import { %s } from './%s';\n", childSchemaName, childSchemaName)
 				code += fmt.Sprintf("\n	%s: %s;", prop.Key, childSchemaName)
@@ -89,6 +95,24 @@ func GenSchema(schema *base.SchemaProxy, resolve ResolveSchemaRef) (fileName str
 		// fmt.Printf("GEN (%s): %s\n", fileName, code)
 	case "integer":
 		content = []byte(fmt.Sprintf("export type %s = number & {}", schemaName))
+	case "array":
+		imports := ""
+		code := fmt.Sprintf("export type %s = ", schemaName)
+
+		schemaProxy := s.Items.A
+		refName := schemaProxy.GetReference()
+		isRef := refName != ""
+		if isRef {
+			childRefName := resolve(op, schemaProxy)
+			childSchemaName := strings.Replace(childRefName, "#/components/schemas/", "", 1)
+			imports += fmt.Sprintf("import { %s } from './%s';\n", childSchemaName, childSchemaName)
+			code += childSchemaName
+		} else {
+			code += schemaToTSType(schemaProxy)
+		}
+		content = []byte(imports + "\n" + code)
+	default:
+		log.Panicf("Unable to generated Schema for type `%s`", schemaType)
 	}
 
 	return

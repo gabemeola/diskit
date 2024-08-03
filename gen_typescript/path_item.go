@@ -12,7 +12,7 @@ import (
 
 const rootUrl = "https://discord.com/api/v10"
 
-var urlArgsRegx = regexp.MustCompile("{(.+)}")
+var urlArgsRegx = regexp.MustCompile(`{(\w+)}`)
 
 type PathItemResult struct {
 	FileName string
@@ -58,7 +58,7 @@ func GenPatchRequest(pathUrl string, op *v3.Operation, resolve ResolveSchemaRef)
 	log.Printf("Generating OP: %s", id)
 	reqBody := op.RequestBody
 	reqBodySchema := reqBody.Content.First().Value().Schema
-	reqBodyRef := resolve(reqBodySchema)
+	reqBodyRef := resolve(op, reqBodySchema)
 	reqBodySchemaName := strings.Replace(reqBodyRef, "#/components/schemas/", "", 1)
 	code := GenOpRequestCode("PATCH", pathUrl, op, resolve, reqBodySchemaName)
 
@@ -78,10 +78,12 @@ func GenOpRequestCode(
 ) []byte {
 	id := op.OperationId
 	id = lo.CamelCase(id)
+	// TODO: Support other typed response codes
 	resSchema := op.Responses.FindResponseByCode(200).Content.First().Value().Schema
-	childRefName := resolve(resSchema)
+	childRefName := resolve(op, resSchema)
 	childSchemaName := strings.Replace(childRefName, "#/components/schemas/", "", 1)
-	// strings.
+	// TODO: Use the "parameters" field on op
+	// It has the Schema ref type attached
 	foundUrlArgs := urlArgsRegx.FindAllString(pathUrl, -1)
 	// fmt.Printf("FOUND: %+v\n", foundUrlArgs)
 	params := []string{}
@@ -93,7 +95,10 @@ func GenOpRequestCode(
 		}
 	}
 	paramsCode := ""
-	for _, param := range params {
+	for i, param := range params {
+		if i > 0 {
+			paramsCode += ", "
+		}
 		paramsCode += fmt.Sprintf("%s: string", param)
 	}
 	if reqBodySchemaName != "" {
