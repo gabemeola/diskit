@@ -5,7 +5,7 @@ type StatusResponseMap = Partial<Record<HttpStatusCode, any>>;
 
 export type TypedResponse<T extends StatusResponseMap> = ResponseWithoutJson &
   (
-    {
+    | {
         [Status in keyof T]: {
           // TODO: There is some fancy way to do "type hints" but I'm forgetting
           // Currently this says the status code could be "200 | 500", but technically
@@ -20,7 +20,7 @@ export type TypedResponse<T extends StatusResponseMap> = ResponseWithoutJson &
     //     json(): Promise<any>;
     //   }
     | {
-        ok: false,
+        ok: false;
         status: 500;
         json(): Promise<never>;
       }
@@ -28,10 +28,10 @@ export type TypedResponse<T extends StatusResponseMap> = ResponseWithoutJson &
 
 type C = TypedResponse<{
   [HttpStatusCode.OK]: {
-    json(): Promise<"OK">
+    json(): Promise<"OK">;
   };
   [HttpStatusCode.ACCEPTED]: {
-    json(): Promise<"accepted">
+    json(): Promise<"accepted">;
   };
 }>;
 
