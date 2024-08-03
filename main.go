@@ -21,9 +21,9 @@ var pathToGen = []string{
 	// "/users/@me/connections",
 	// TODO: Support other ops outside of GET
 	"/users/@me",
-	// "/oauth2/applications/@me",
-	// "/applications/@me",
-	// "/applications/{application_id}",
+	"/oauth2/applications/@me",
+	"/applications/@me",
+	"/applications/{application_id}",
 }
 
 func main() {

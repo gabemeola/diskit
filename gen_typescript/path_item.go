@@ -96,6 +96,9 @@ func GenOpRequestCode(
 		paramsCode += fmt.Sprintf("%s: string", param)
 	}
 	if reqBodySchemaName != "" {
+		if len(params) > 0 {
+			paramsCode += ", "
+		}
 		paramsCode += fmt.Sprintf("body: %s", reqBodySchemaName)
 	}
 
