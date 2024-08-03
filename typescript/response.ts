@@ -27,7 +27,6 @@ interface StatusResponseMap extends Partial<Record<HttpStatusCode, any>> {};
 //   );
 
 type ResponseWithData<T> = ResponseWithoutJson & T;
-// interface ResponseWithData<T> = ResponseWithoutJson & T;
 
 // TODO: These types might be too expensive to compute an slow down the code base
 export type TypedResponse<T extends StatusResponseMap> =
@@ -38,11 +37,11 @@ export type TypedResponse<T extends StatusResponseMap> =
         } & T[Status]
       >;
     }[keyof T]
-  | ResponseWithData<{
-      ok: false;
-      status: 500;
-      json(): Promise<never>;
-    }>
+  // | ResponseWithData<{
+  //     ok: false;
+  //     status: 500;
+  //     json(): Promise<never>;
+  //   }>
   | ResponseWithData<{
       // status: Exclude<AnyStatusCode, keyof T>;
       json(): Promise<never>;
