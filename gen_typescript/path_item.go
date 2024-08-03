@@ -132,6 +132,8 @@ export class %s extends Request {
 	operation: '%s';
 }
 
+// TODO: Try creating the Response union in file instead of as a utility type.
+// Could be clearer and more performant for typescript.
 export type %s = TypedResponse<{
 	200: {
 		ok: true,
