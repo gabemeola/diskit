@@ -3,7 +3,7 @@ import { BotAccountPatchRequest } from '../schema/BotAccountPatchRequest';
 
 
 export class UpdateMyUserRequest extends Request {
-	method: 'GET';
+	method: 'PATCH';
   // Need to have some unique item on the class
 	// otherwise Typescript will consider the some Request equal
 	// since it is structural typing instead of nominal.

@@ -44,7 +44,7 @@ func GenPathItem(pathUrl string, pathItem *v3.PathItem, resolve ResolveSchemaRef
 func GenGetRequest(pathUrl string, op *v3.Operation, resolve ResolveSchemaRef) *PathItemResult {
 	id := op.OperationId
 	log.Printf("Generating OP: %s", id)
-	code := GenOpRequestCode(pathUrl, op, resolve, "")
+	code := GenOpRequestCode("GET", pathUrl, op, resolve, "")
 
 	fileName := lo.CamelCase(id) + ".ts"
 	return &PathItemResult{
@@ -60,7 +60,7 @@ func GenPatchRequest(pathUrl string, op *v3.Operation, resolve ResolveSchemaRef)
 	reqBodySchema := reqBody.Content.First().Value().Schema
 	reqBodyRef := resolve(reqBodySchema)
 	reqBodySchemaName := strings.Replace(reqBodyRef, "#/components/schemas/", "", 1)
-	code := GenOpRequestCode(pathUrl, op, resolve, reqBodySchemaName)
+	code := GenOpRequestCode("PATCH", pathUrl, op, resolve, reqBodySchemaName)
 
 	fileName := lo.CamelCase(id) + ".ts"
 	return &PathItemResult{
@@ -70,6 +70,7 @@ func GenPatchRequest(pathUrl string, op *v3.Operation, resolve ResolveSchemaRef)
 }
 
 func GenOpRequestCode(
+	opType string,
 	pathUrl string,
 	op *v3.Operation,
 	resolve ResolveSchemaRef,
@@ -111,7 +112,7 @@ func GenOpRequestCode(
 	reqClassName := lo.PascalCase(id + "Request")
 	declarationCode := fmt.Sprintf(`
 export class %s extends Request {
-	method: 'GET';
+	method: '%s';
   // Need to have some unique item on the class
 	// otherwise Typescript will consider the some Request equal
 	// since it is structural typing instead of nominal.
@@ -129,6 +130,7 @@ declare module '../diskit.ts' {
 }
 	`,
 		reqClassName,
+		opType,
 		op.OperationId,
 		reqClassName,
 		childSchemaName,
