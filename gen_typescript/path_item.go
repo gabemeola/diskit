@@ -14,12 +14,32 @@ const rootUrl = "https://discord.com/api/v10"
 
 var urlArgsRegx = regexp.MustCompile("{(.+)}")
 
-func GenPathItem(pathUrl string, pathItem *v3.PathItem, resolve ResolveSchemaRef) (fileName string, content []byte) {
-	op := pathItem.Get
-	if op == nil {
+type PathItemResult struct {
+	FileName string
+	Content  []byte
+}
+
+func GenPathItem(pathUrl string, pathItem *v3.PathItem, resolve ResolveSchemaRef) []*PathItemResult {
+	ops := pathItem.GetOperations()
+	results := make([]*PathItemResult, 0, ops.Len())
+
+	for pair := ops.Oldest(); pair != nil; pair = pair.Next() {
+		key := pair.Key
+		op := pair.Value
+
+		switch key {
+		case "get":
+			results = append(results, GenGetRequest(pathUrl, op, resolve))
 		// TODO: Support other CRUD operations
-		return
+		default:
+			log.Printf("Unsupported op `%s` for: %s", key, pathUrl)
+		}
 	}
+
+	return results
+}
+
+func GenGetRequest(pathUrl string, op *v3.Operation, resolve ResolveSchemaRef) *PathItemResult {
 	id := op.OperationId
 	log.Printf("Generating API: %s", id)
 	id = lo.CamelCase(id)
@@ -95,6 +115,9 @@ declare module '../diskit.ts' {
 
 	code += "\n}"
 
-	fileName = id + ".ts"
-	return fileName, []byte(imports + "\n" + declarationCode + "\n" + code)
+	fileName := id + ".ts"
+	return &PathItemResult{
+		FileName: fileName,
+		Content:  []byte(imports + "\n" + declarationCode + "\n" + code),
+	}
 }

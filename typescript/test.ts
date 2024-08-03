@@ -7,7 +7,7 @@ const client = new DiskitClient({
     // TODO: You'll need to update auth after a request in non bot cases
     Authorization: "Bot 12345",
   },
-});
+})
 
 async function test() {
   const appId = "123";

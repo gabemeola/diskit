@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"sync"
+	"time"
 
 	"github.com/gabemeola/diskit/ast"
 	typescript "github.com/gabemeola/diskit/gen_typescript"
@@ -22,11 +23,15 @@ var pathToGen = []string{
 	"/users/@me",
 	"/oauth2/applications/@me",
 	"/applications/@me",
-	// TODO: Support url params
-	"/applications/{application_id}",	
+	"/applications/{application_id}",
 }
 
 func main() {
+	start := time.Now()
+	defer func() {
+		duration := time.Since(start)
+		log.Printf("Generated in %fs or %d microseconds", duration.Seconds(), duration.Microseconds())
+	}()
 	file, err := os.ReadFile("openapi.json")
 	invariantErr(err, "error reading file")
 
@@ -147,9 +152,14 @@ func main() {
 		}
 		fmt.Printf("GENERATING PATH: %s\n", pathUrl)
 		PrettyPrint(path)
-		fileName, content := typescript.GenPathItem(pathUrl, path, resolveSchemaRef)
-		err = os.WriteFile(filepath.Join("typescript", "api", fileName), content, os.ModePerm)
-		invariantErr(err, "error writing file for: "+pathUrl)
+		results := typescript.GenPathItem(pathUrl, path, resolveSchemaRef)
+		for _, res := range results {
+			err = os.WriteFile(filepath.Join("typescript", "api", res.FileName), res.Content, os.ModePerm)
+			invariantErr(err, "error writing file for: "+pathUrl)
+			// Clear memory
+			res.Content = []byte{}
+			res.FileName = ""
+		}
 	}
 
 	wg.Wait()

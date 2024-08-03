@@ -3,14 +3,14 @@ export interface DiskitClient {
 }
 
 export class DiskitClient {
-  private headers: Headers;
+  #headers: Headers;
   constructor(cfg: { headers: HeadersInit }) {
-    this.headers = new Headers(cfg.headers);
+    this.#headers = new Headers(cfg.headers);
   }
 
   public async request(request: Request): Promise<unknown> {
     return await fetch(request, {
-      headers: this.headers,
+      headers: this.#headers,
     });
   }
 }
