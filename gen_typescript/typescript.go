@@ -56,7 +56,7 @@ func GenSchema(
 	case "string":
 		content = []byte(fmt.Sprintf("export type %s = string & {}", schemaName))
 	case "object":
-		imports := ""
+		imports := map[string]struct{}{}
 		// TODO: Change to interface. Better for TS perf
 		code := fmt.Sprintf("export type %s = {", schemaName)
 		for prop := s.Properties.OrderedMap.Oldest(); prop != nil; prop = prop.Next() {
@@ -67,7 +67,7 @@ func GenSchema(
 			if isRef {
 				childRefName := resolve(op, schemaProxy)
 				childSchemaName := strings.Replace(childRefName, "#/components/schemas/", "", 1)
-				imports += fmt.Sprintf("import { %s } from './%s';\n", childSchemaName, childSchemaName)
+				imports[childSchemaName] = struct{}{}
 				code += fmt.Sprintf("\n	%s: %s;", prop.Key, childSchemaName)
 				continue
 			}
@@ -91,7 +91,13 @@ func GenSchema(
 		// fmt.Printf("RESOLVED: %+v\n", resolve(m.Value("id")))
 		// fmt.Printf("description (%s): %+v\n", m.Value("description").GetReference(), m.Value("description").Schema())
 		code += "\n}"
-		content = []byte(imports + "\n" + code)
+		
+		importsCode := ""
+		for schemaName := range imports {
+			importsCode += fmt.Sprintf("import { %s } from './%s';\n", schemaName, schemaName)
+		}
+
+		content = []byte(importsCode + "\n" + code)
 		// fmt.Printf("GEN (%s): %s\n", fileName, code)
 	case "integer":
 		content = []byte(fmt.Sprintf("export type %s = number & {}", schemaName))

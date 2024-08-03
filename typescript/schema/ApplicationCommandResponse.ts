@@ -1,6 +1,4 @@
 import { SnowflakeType } from './SnowflakeType';
-import { SnowflakeType } from './SnowflakeType';
-import { SnowflakeType } from './SnowflakeType';
 import { ApplicationCommandType } from './ApplicationCommandType';
 
 export type ApplicationCommandResponse = {
