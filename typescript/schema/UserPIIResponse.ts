@@ -1,6 +1,6 @@
-import { AvailableLocalesEnum } from './AvailableLocalesEnum';
 import { SnowflakeType } from './SnowflakeType';
 import { Int53Type } from './Int53Type';
+import { AvailableLocalesEnum } from './AvailableLocalesEnum';
 
 export type UserPIIResponse = {
 	id: SnowflakeType;

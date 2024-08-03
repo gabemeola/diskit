@@ -1,5 +1,5 @@
-import { UserResponse } from './UserResponse';
 import { SnowflakeType } from './SnowflakeType';
+import { UserResponse } from './UserResponse';
 
 export type PrivateApplicationResponse = {
 	id: SnowflakeType;

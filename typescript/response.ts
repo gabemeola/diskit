@@ -1,7 +1,7 @@
 import { HttpStatusCode, AnyStatusCode } from "./status";
 
-type ResponseWithoutJson = Omit<Response, "json">;
-type StatusResponseMap = Partial<Record<HttpStatusCode, any>>;
+interface ResponseWithoutJson extends Omit<Response, "json"> {}
+interface StatusResponseMap extends Partial<Record<HttpStatusCode, any>> {};
 
 // export type TypedResponse<T extends StatusResponseMap> = ResponseWithoutJson &
 //   (
@@ -29,6 +29,7 @@ type StatusResponseMap = Partial<Record<HttpStatusCode, any>>;
 type ResponseWithData<T> = ResponseWithoutJson & T;
 // interface ResponseWithData<T> = ResponseWithoutJson & T;
 
+// TODO: These types might be too expensive to compute an slow down the code base
 export type TypedResponse<T extends StatusResponseMap> =
   | {
       [Status in keyof T]: ResponseWithData<
