@@ -43,7 +43,7 @@ export type TypedResponse<T extends StatusResponseMap> =
   //     json(): Promise<never>;
   //   }>
   | ResponseWithData<{
-      // status: Exclude<AnyStatusCode, keyof T>;
+      status: Exclude<AnyStatusCode, keyof T>;
       json(): Promise<never>;
     }>;
 
