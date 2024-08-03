@@ -42,7 +42,7 @@ func GenSchema(schema *base.SchemaProxy, resolve ResolveSchemaRef) (fileName str
 		log.Panicf("expected schema type (%s) to contain 1 item. Got: %+v", refName, schemaTypes)
 	}
 	schemaType := schemaTypes[0]
-	fmt.Printf("TYPE: %+v\n", schemaType)
+	// fmt.Printf("TYPE: %+v\n", schemaType)
 	schemaName := strings.Replace(refName, "#/components/schemas/", "", 1)
 	fileName = schemaName + ".ts"
 
@@ -70,7 +70,7 @@ func GenSchema(schema *base.SchemaProxy, resolve ResolveSchemaRef) (fileName str
 				// TODO: Skip "oneOf" for now
 				continue
 			}
-			fmt.Printf("[%s]: %+v\n", prop.Key, schema.Type)
+			// fmt.Printf("[%s]: %+v\n", prop.Key, schema.Type)
 			key := prop.Key
 			valTSType := schemaToTSType(schemaProxy)
 			if strings.Contains(valTSType, "null") {

@@ -151,7 +151,7 @@ func main() {
 			log.Panicf("unable to load path")
 		}
 		fmt.Printf("GENERATING PATH: %s\n", pathUrl)
-		PrettyPrint(path)
+		// PrettyPrint(path)
 		results := typescript.GenPathItem(pathUrl, path, resolveSchemaRef)
 		for _, res := range results {
 			err = os.WriteFile(filepath.Join("typescript", "api", res.FileName), res.Content, os.ModePerm)
