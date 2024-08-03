@@ -10,6 +10,16 @@ const client = new DiskitClient({
 })
 
 async function test() {
+  // const na = await client.request(new Request(''))
+  // if (na.status === 200) {
+  //   const json = await na.json()
+  // } else if (na.status === 201) {
+  //   const json = await na.json()
+  // } else {
+  //   const json = await na.json()
+  // }
+
+
   const appId = "123";
   const app = await client.request(getApplication(appId));
   app.owner.id;

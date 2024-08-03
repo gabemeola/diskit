@@ -26,6 +26,7 @@ var pathToGen = []string{
 	"/applications/@me",
 	"/applications/{application_id}",
 	"/applications/{application_id}/guilds/{guild_id}/commands",
+	// TODO: Support 201 responses (and any other codes)
 	// "/guilds",
 }
 
