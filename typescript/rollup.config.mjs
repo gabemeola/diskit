@@ -38,6 +38,7 @@ function writePkgJson() {
       import: `${exportPath}.mjs`,
     };
   });
+  pkgJson.private = false
   pkgJson.exports = exports;
   fs.mkdirSync("pkg");
   fs.writeFileSync(
