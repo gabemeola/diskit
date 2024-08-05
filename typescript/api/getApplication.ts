@@ -3,7 +3,7 @@ import { PrivateApplicationResponse } from '../schema/PrivateApplicationResponse
 
 
 export class GetApplicationRequest extends Request {
-	method: 'GET';
+	method = 'GET';
   // Need to have some unique item on the class
 	// otherwise Typescript will consider the some Request equal
 	// since it is structural typing instead of nominal.
@@ -11,9 +11,11 @@ export class GetApplicationRequest extends Request {
 	//
 	// I could use a type alias to get around this but a class might be useful for other things.
 	// Point for type alias is it is more lightweight on memory (but might not be a non-issue).
-	operation: 'get_application';
+	operation = 'get_application';
 }
 
+// TODO: Try creating the Response union in file instead of as a utility type.
+// Could be clearer and more performant for typescript.
 export type GetApplicationResponse = TypedResponse<{
 	200: {
 		ok: true,
