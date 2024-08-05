@@ -3,7 +3,7 @@ import { UserPIIResponse } from '../schema/UserPIIResponse';
 
 
 export class GetMyUserRequest extends Request {
-	method = 'GET';
+	method = 'GET' as const;
   // Need to have some unique item on the class
 	// otherwise Typescript will consider the some Request equal
 	// since it is structural typing instead of nominal.
@@ -11,7 +11,7 @@ export class GetMyUserRequest extends Request {
 	//
 	// I could use a type alias to get around this but a class might be useful for other things.
 	// Point for type alias is it is more lightweight on memory (but might not be a non-issue).
-	operation = 'get_my_user';
+	operation = 'get_my_user' as const;
 }
 
 // TODO: Try creating the Response union in file instead of as a utility type.
@@ -23,7 +23,7 @@ export type GetMyUserResponse = TypedResponse<{
 	},
 }>
 
-declare module '../diskit.ts' {
+declare module '../diskit' {
   interface DiskitClient {
     request(request: GetMyUserRequest): Promise<GetMyUserResponse>
   }
