@@ -1,6 +1,6 @@
 {
   "name": "diskit",
-  "version": "0.0.0-alpha.1",
+  "version": "0.0.0-alpha.2",
   "description": "Discord API Kit",
   "private": true,
   "keywords": [],
@@ -9,7 +9,9 @@
   "files": [
     "api",
     "schema",
-    "*.ts"
+    "*.ts",
+    "*.cjs",
+    "*.mjs"
   ],
   "scripts": {
     "build": "rollup -c rollup.config.mjs && npm pack ./pkg"

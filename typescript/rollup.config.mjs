@@ -40,6 +40,8 @@ function writePkgJson() {
   });
   pkgJson.private = false
   pkgJson.exports = exports;
+  delete pkgJson.scripts
+  delete pkgJson.devDependencies
   fs.mkdirSync("pkg");
   fs.writeFileSync(
     path.join("pkg", "package.json"),
