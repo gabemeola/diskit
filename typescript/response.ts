@@ -58,25 +58,25 @@ type C = TypedResponse<{
   };
 }>;
 
-const c = "" as unknown as C;
-c.status;
-c.json();
-if (c.ok) {
-  const r = c.json()
-}
-if (c.status === HttpStatusCode.OK) {
-  const r = c.json();
-}
-if (c.status === HttpStatusCode.ACCEPTED) {
-  const r = c.json();
-}
-if (c.status !== HttpStatusCode.OK && c.status !== HttpStatusCode.ACCEPTED) {
-  const r = c.json();
-}
-if (c.status === 500) {
-  const r = c.json();
-}
+// const c = "" as unknown as C;
+// c.status;
+// c.json();
+// if (c.ok) {
+//   const r = c.json()
+// }
+// if (c.status === HttpStatusCode.OK) {
+//   const r = c.json();
+// }
+// if (c.status === HttpStatusCode.ACCEPTED) {
+//   const r = c.json();
+// }
+// if (c.status !== HttpStatusCode.OK && c.status !== HttpStatusCode.ACCEPTED) {
+//   const r = c.json();
+// }
+// if (c.status === 500) {
+//   const r = c.json();
+// }
 
-if (c.status === 300) {
-  const r = c.json();
-}
+// if (c.status === 300) {
+//   const r = c.json();
+// }

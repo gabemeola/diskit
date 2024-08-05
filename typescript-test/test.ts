@@ -1,6 +1,6 @@
-import { DiskitClient } from "./diskit";
-import { getMyUser } from "./api/getMyUser";
-import { getApplication } from "./api/getApplication";
+import { DiskitClient } from "diskit";
+import { getMyUser } from "diskit/api/getMyUser";
+import { getApplication } from "diskit/api/getApplication";
 
 const client = new DiskitClient({
   headers: {
@@ -10,7 +10,7 @@ const client = new DiskitClient({
 })
 
 async function test() {
-  // const na = await client.request(new Request(''))
+  const na = await client.request(new Request(''))
   // if (na.status === 200) {
   //   const json = await na.json()
   // } else if (na.status === 201) {

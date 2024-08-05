@@ -1,0 +1,23 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      diskit:
+        specifier: ../typescript/diskit-0.0.0-alpha.1.tgz
+        version: file:../typescript/diskit-0.0.0-alpha.1.tgz
+
+packages:
+
+  diskit@file:../typescript/diskit-0.0.0-alpha.1.tgz:
+    resolution: {integrity: sha512-ILsQM4UsOgaGAVyL1UrMVR7UsxPwhsIvWJTdDR0qBu3y6ubASckFu5OHztJ+C7pzNrx69dsuFJHKOFKECMedQg==, tarball: file:../typescript/diskit-0.0.0-alpha.1.tgz}
+    version: 0.0.0-alpha.1
+
+snapshots:
+
+  diskit@file:../typescript/diskit-0.0.0-alpha.1.tgz: {}
