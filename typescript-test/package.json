@@ -10,6 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "diskit": "../typescript/diskit-0.0.0-alpha.1.tgz"
+    "diskit": "../typescript/diskit-0.0.0-alpha.3.tgz"
+  },
+  "devDependencies": {
+    "serve": "^14.2.3"
   }
 }

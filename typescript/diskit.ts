@@ -4,8 +4,8 @@ export interface DiskitClient {
 
 export class DiskitClient {
   #headers: Headers;
-  constructor(cfg: { headers: HeadersInit }) {
-    this.#headers = new Headers(cfg.headers);
+  constructor({ headers = {} }: { headers?: HeadersInit }) {
+    this.#headers = new Headers(headers);
   }
 
   // TODO: Would be nice to have individual types per response code

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Diskit Browser Test</title>
+  </head>
+  <div>
+    <h1>Diskit</h1>
+    <hr />
+    <div>ME: <pre id="me"></pre></div>
+  </div>
+  <script type="module">
+    import { DiskitClient } from "https://esm.sh/diskit@0.0.0-alpha.3/diskit";
+    // import { getApplication } from "https://esm.sh/diskit@0.0.0-alpha.3/api/getApplication";
+    import { getMyUser } from "https://esm.sh/diskit@0.0.0-alpha.3/api/getMyUser";
+
+    const botToken = ""
+
+    const client = new DiskitClient({
+      headers: {
+        Authorization: `Bot ${botToken}`
+      },
+    });
+
+    // client.request(getApplication('1124098983472677036'))
+    client.request(getMyUser())
+      .then((res) => {
+        return res.json()
+      })
+      .then((data) => {
+        document.getElementById('me').innerText = JSON.stringify(data, null, 2)
+      })
+  </script>
+</html>
