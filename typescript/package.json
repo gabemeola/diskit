@@ -1,0 +1,9 @@
+{
+  "name": "diskit",
+  "version": "0.0.0-alpha.1",
+  "description": "Discord API Kit",
+  "main": "index.js",
+  "keywords": [],
+  "author": "Gabe M <banter@gabe.mx>",
+  "license": "Mozilla Public License Version 2.0"
+}
