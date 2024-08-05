@@ -1,0 +1,28 @@
+{
+  "name": "diskit",
+  "version": "0.0.0-alpha.3",
+  "description": "Discord API Kit",
+  "private": true,
+  "keywords": [],
+  "author": "Gabe M <banter@gabe.mx>",
+  "license": "Mozilla Public License Version 2.0",
+  "main": "index.cjs",
+  "module": "index.mjs",
+  "files": [
+    "api",
+    "schema",
+    "*.ts",
+    "*.cjs",
+    "*.mjs"
+  ],
+  "scripts": {
+    "build": "rollup -c rollup.config.mjs && npm pack ./pkg"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^11.1.6",
+    "globby": "^14.0.2",
+    "rollup": "^4.20.0",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.4"
+  }
+}
