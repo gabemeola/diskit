@@ -1,0 +1,2 @@
+
+export type GuildNSFWContentLevel = number & (0 | 1 | 2 | 3)

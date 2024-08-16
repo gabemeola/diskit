@@ -180,9 +180,9 @@ func main() {
 		path := pair.Value
 		count++
 		fmt.Printf("GENERATING PATH (%d): %s\n", count, pathUrl)
-		if count >= 100 {
-			break
-		}
+		// if count >= 100 {
+		// 	break
+		// }
 		// PrettyPrint(path)
 		results := typescript.GenPathItem(pathUrl, path, resolveSchemaRef)
 		for _, res := range results {
