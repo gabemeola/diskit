@@ -1,5 +1,5 @@
 
-export type GatewayBotSessionStartLimitResponse = {
+export interface GatewayBotSessionStartLimitResponse {
     /** Format: int32 */
     max_concurrency: number;
     /** Format: int32 */

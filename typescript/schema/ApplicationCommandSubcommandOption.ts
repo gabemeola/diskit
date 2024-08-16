@@ -8,7 +8,7 @@ import { ApplicationCommandRoleOption } from './ApplicationCommandRoleOption';
 import { ApplicationCommandStringOption } from './ApplicationCommandStringOption';
 import { ApplicationCommandUserOption } from './ApplicationCommandUserOption';
 
-export type ApplicationCommandSubcommandOption = {
+export interface ApplicationCommandSubcommandOption {
     description: string;
     description_localizations?: {
         [key: string]: string;

@@ -12,7 +12,7 @@ import { ApplicationCommandType } from './ApplicationCommandType';
 import { ApplicationCommandUserOptionResponse } from './ApplicationCommandUserOptionResponse';
 import { SnowflakeType } from './SnowflakeType';
 
-export type ApplicationCommandResponse = {
+export interface ApplicationCommandResponse {
     application_id: SnowflakeType;
     default_member_permissions?: string | null;
     description: string;

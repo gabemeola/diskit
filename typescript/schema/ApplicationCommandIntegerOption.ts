@@ -1,7 +1,7 @@
 import { ApplicationCommandOptionIntegerChoice } from './ApplicationCommandOptionIntegerChoice';
 import { Int53Type } from './Int53Type';
 
-export type ApplicationCommandIntegerOption = {
+export interface ApplicationCommandIntegerOption {
     autocomplete?: boolean | null;
     choices?: ApplicationCommandOptionIntegerChoice[] | null;
     description: string;

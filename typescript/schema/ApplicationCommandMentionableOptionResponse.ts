@@ -1,5 +1,5 @@
 
-export type ApplicationCommandMentionableOptionResponse = {
+export interface ApplicationCommandMentionableOptionResponse {
     description: string;
     description_localizations?: {
         [key: string]: string;

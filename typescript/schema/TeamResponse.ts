@@ -1,7 +1,7 @@
 import { SnowflakeType } from './SnowflakeType';
 import { TeamMemberResponse } from './TeamMemberResponse';
 
-export type TeamResponse = {
+export interface TeamResponse {
     icon?: string | null;
     id: SnowflakeType;
     members: TeamMemberResponse[];

@@ -10,7 +10,7 @@ import { ApplicationCommandSubcommandGroupOption } from './ApplicationCommandSub
 import { ApplicationCommandSubcommandOption } from './ApplicationCommandSubcommandOption';
 import { ApplicationCommandUserOption } from './ApplicationCommandUserOption';
 
-export type ApplicationCommandPatchRequestPartial = {
+export interface ApplicationCommandPatchRequestPartial {
     default_member_permissions?: number | null;
     description?: string | null;
     description_localizations?: {

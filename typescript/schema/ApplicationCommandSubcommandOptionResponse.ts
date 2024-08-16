@@ -8,7 +8,7 @@ import { ApplicationCommandRoleOptionResponse } from './ApplicationCommandRoleOp
 import { ApplicationCommandStringOptionResponse } from './ApplicationCommandStringOptionResponse';
 import { ApplicationCommandUserOptionResponse } from './ApplicationCommandUserOptionResponse';
 
-export type ApplicationCommandSubcommandOptionResponse = {
+export interface ApplicationCommandSubcommandOptionResponse {
     description: string;
     description_localizations?: {
         [key: string]: string;

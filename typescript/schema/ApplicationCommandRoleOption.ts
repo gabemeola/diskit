@@ -1,5 +1,5 @@
 
-export type ApplicationCommandRoleOption = {
+export interface ApplicationCommandRoleOption {
     description: string;
     description_localizations?: {
         [key: string]: string;

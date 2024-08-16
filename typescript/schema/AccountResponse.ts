@@ -1,5 +1,5 @@
 
-export type AccountResponse = {
+export interface AccountResponse {
     id: string;
     name?: string | null;
 }

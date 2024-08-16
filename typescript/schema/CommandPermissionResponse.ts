@@ -1,7 +1,7 @@
 import { ApplicationCommandPermissionType } from './ApplicationCommandPermissionType';
 import { SnowflakeType } from './SnowflakeType';
 
-export type CommandPermissionResponse = {
+export interface CommandPermissionResponse {
     id: SnowflakeType;
     permission: boolean;
     type: ApplicationCommandPermissionType;

@@ -1,5 +1,5 @@
 
-export type ApplicationCommandOptionNumberChoice = {
+export interface ApplicationCommandOptionNumberChoice {
     name: string;
     name_localizations?: {
         [key: string]: string;

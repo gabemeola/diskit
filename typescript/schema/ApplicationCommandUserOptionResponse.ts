@@ -1,5 +1,5 @@
 
-export type ApplicationCommandUserOptionResponse = {
+export interface ApplicationCommandUserOptionResponse {
     description: string;
     description_localizations?: {
         [key: string]: string;

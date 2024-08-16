@@ -4,7 +4,7 @@ import { SnowflakeType } from './SnowflakeType';
 import { TeamResponse } from './TeamResponse';
 import { UserResponse } from './UserResponse';
 
-export type PrivateApplicationResponse = {
+export interface PrivateApplicationResponse {
     /** Format: int32 */
     approximate_guild_count?: number | null;
     bot?: null | UserResponse;

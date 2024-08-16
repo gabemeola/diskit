@@ -1,5 +1,5 @@
 
-export type ApplicationCommandBooleanOption = {
+export interface ApplicationCommandBooleanOption {
     description: string;
     description_localizations?: {
         [key: string]: string;

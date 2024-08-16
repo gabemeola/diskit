@@ -1,6 +1,6 @@
 import { ChannelTypes } from './ChannelTypes';
 
-export type ApplicationCommandChannelOption = {
+export interface ApplicationCommandChannelOption {
     channel_types?: ChannelTypes[] | null;
     description: string;
     description_localizations?: {

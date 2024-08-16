@@ -1,6 +1,6 @@
 import { GatewayBotSessionStartLimitResponse } from './GatewayBotSessionStartLimitResponse';
 
-export type GatewayBotResponse = {
+export interface GatewayBotResponse {
     session_start_limit: GatewayBotSessionStartLimitResponse;
     /** Format: int32 */
     shards: number;

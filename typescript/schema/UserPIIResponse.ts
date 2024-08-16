@@ -3,7 +3,7 @@ import { Int53Type } from './Int53Type';
 import { PremiumTypes } from './PremiumTypes';
 import { SnowflakeType } from './SnowflakeType';
 
-export type UserPIIResponse = {
+export interface UserPIIResponse {
     /** Format: int32 */
     accent_color?: number | null;
     avatar?: string | null;

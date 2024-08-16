@@ -1,6 +1,6 @@
 import { ApplicationCommandSubcommandOptionResponse } from './ApplicationCommandSubcommandOptionResponse';
 
-export type ApplicationCommandSubcommandGroupOptionResponse = {
+export interface ApplicationCommandSubcommandGroupOptionResponse {
     description: string;
     description_localizations?: {
         [key: string]: string;

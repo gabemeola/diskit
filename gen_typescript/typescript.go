@@ -190,7 +190,12 @@ func GenSchema2(
 		return schemaName
 	})
 	// fmt.Printf("NODE RES: \n%s\n\n", schemaCode)
-	schemaTypeCode := fmt.Sprintf("export type %s = %s", schemaName, schemaCode)
+	schemaTypeCode := ""
+	if strings.HasPrefix(schemaCode, "{") {
+		schemaTypeCode = fmt.Sprintf("export interface %s %s", schemaName, schemaCode)
+	} else {
+		schemaTypeCode = fmt.Sprintf("export type %s = %s", schemaName, schemaCode)
+	}
 
 	importsCode := ""
 	importsSlice := schemaImports.ToSlice()

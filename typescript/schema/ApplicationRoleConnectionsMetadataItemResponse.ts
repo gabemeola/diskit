@@ -1,6 +1,6 @@
 import { MetadataItemTypes } from './MetadataItemTypes';
 
-export type ApplicationRoleConnectionsMetadataItemResponse = {
+export interface ApplicationRoleConnectionsMetadataItemResponse {
     description: string;
     description_localizations?: {
         [key: string]: string;

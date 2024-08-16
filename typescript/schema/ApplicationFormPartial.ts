@@ -2,7 +2,7 @@ import { ApplicationOAuth2InstallParams } from './ApplicationOAuth2InstallParams
 import { ApplicationTypes } from './ApplicationTypes';
 import { SnowflakeType } from './SnowflakeType';
 
-export type ApplicationFormPartial = {
+export interface ApplicationFormPartial {
     cover_image?: string | null;
     /** Format: uri */
     custom_install_url?: string | null;

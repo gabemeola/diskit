@@ -1,5 +1,5 @@
 
-export type ApplicationCommandAttachmentOptionResponse = {
+export interface ApplicationCommandAttachmentOptionResponse {
     description: string;
     description_localizations?: {
         [key: string]: string;

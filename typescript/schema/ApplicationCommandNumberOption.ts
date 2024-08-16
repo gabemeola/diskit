@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionNumberChoice } from './ApplicationCommandOptionNumberChoice';
 
-export type ApplicationCommandNumberOption = {
+export interface ApplicationCommandNumberOption {
     autocomplete?: boolean | null;
     choices?: ApplicationCommandOptionNumberChoice[] | null;
     description: string;

@@ -1,6 +1,6 @@
 import { Int53Type } from './Int53Type';
 
-export type ApplicationCommandOptionIntegerChoice = {
+export interface ApplicationCommandOptionIntegerChoice {
     name: string;
     name_localizations?: {
         [key: string]: string;

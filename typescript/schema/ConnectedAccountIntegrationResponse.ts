@@ -2,7 +2,7 @@ import { AccountResponse } from './AccountResponse';
 import { ConnectedAccountGuildResponse } from './ConnectedAccountGuildResponse';
 import { IntegrationTypes } from './IntegrationTypes';
 
-export type ConnectedAccountIntegrationResponse = {
+export interface ConnectedAccountIntegrationResponse {
     account: AccountResponse;
     guild: ConnectedAccountGuildResponse;
     id: string;

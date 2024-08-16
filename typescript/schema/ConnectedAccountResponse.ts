@@ -2,7 +2,7 @@ import { ConnectedAccountIntegrationResponse } from './ConnectedAccountIntegrati
 import { ConnectedAccountProviders } from './ConnectedAccountProviders';
 import { ConnectedAccountVisibility } from './ConnectedAccountVisibility';
 
-export type ConnectedAccountResponse = {
+export interface ConnectedAccountResponse {
     friend_sync: boolean;
     id: string;
     integrations?: ConnectedAccountIntegrationResponse[] | null;

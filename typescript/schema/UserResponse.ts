@@ -1,7 +1,7 @@
 import { Int53Type } from './Int53Type';
 import { SnowflakeType } from './SnowflakeType';
 
-export type UserResponse = {
+export interface UserResponse {
     /** Format: int32 */
     accent_color?: number | null;
     avatar?: string | null;
