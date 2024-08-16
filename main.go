@@ -157,7 +157,7 @@ func main() {
 				wg.Done()
 				continue
 			}
-			log.Printf("Processing %s", refName)
+			// log.Printf("Processing %s", refName)
 			processedSchemas[refName] = struct{}{}
 			// fileName, data := typescript.GenSchema(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaRef)
 			fileName, data := typescript.GenSchema2(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaByName)
@@ -178,7 +178,7 @@ func main() {
 		path := pair.Value
 		count++
 		fmt.Printf("GENERATING PATH (%d): %s\n", count, pathUrl)
-		if count > 5 {
+		if count >= 10 {
 			break
 		}
 		// PrettyPrint(path)
