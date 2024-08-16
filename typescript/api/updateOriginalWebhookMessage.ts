@@ -1,6 +1,6 @@
 import { TypedResponse } from '../response';
-import { MessageResponse } from '../schema/MessageResponse';
 import { IncomingWebhookUpdateRequestPartial } from '../schema/IncomingWebhookUpdateRequestPartial';
+import { MessageResponse } from '../schema/MessageResponse';
 
 
 export class UpdateOriginalWebhookMessageRequest extends Request {

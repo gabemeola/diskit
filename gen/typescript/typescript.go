@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	mapset "github.com/deckarep/golang-set/v2"
-	"github.com/gabemeola/diskit/ast"
+	"github.com/gabemeola/diskit/gen/ast"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
 )

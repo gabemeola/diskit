@@ -1,6 +1,6 @@
 import { TypedResponse } from '../response';
-import { UserPIIResponse } from '../schema/UserPIIResponse';
 import { BotAccountPatchRequest } from '../schema/BotAccountPatchRequest';
+import { UserPIIResponse } from '../schema/UserPIIResponse';
 
 
 export class UpdateMyUserRequest extends Request {

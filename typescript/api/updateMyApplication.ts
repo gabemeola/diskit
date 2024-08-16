@@ -1,6 +1,6 @@
 import { TypedResponse } from '../response';
-import { PrivateApplicationResponse } from '../schema/PrivateApplicationResponse';
 import { ApplicationFormPartial } from '../schema/ApplicationFormPartial';
+import { PrivateApplicationResponse } from '../schema/PrivateApplicationResponse';
 
 
 export class UpdateMyApplicationRequest extends Request {
