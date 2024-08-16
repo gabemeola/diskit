@@ -81,7 +81,13 @@ func GenOpRequestCode(
 	// TODO: Support other typed response codes
 	ok200Res := op.Responses.FindResponseByCode(200)
 	if ok200Res == nil {
-		return []byte("TODO")
+		code := fmt.Sprintf(
+			`export function %s(): never {
+				throw new Error("TODO: Unimplemented")
+			}`,
+			id,
+		)
+		return []byte(code)
 	}
 	resSchema := ok200Res.Content.First().Value().Schema
 	childRefName := resolve(op, resSchema)
