@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/gabemeola/diskit/gen"
@@ -37,7 +38,10 @@ func main() {
 	file, err := os.ReadFile("openapi.json")
 	invariantErr(err, "error reading file")
 
-	gen.GenFromDocument(file)
+	gen.GenFromDocument(file, gen.GenOpts{
+		APIOutDir:    filepath.Join("typescript", "api"),
+		SchemaOutDir: filepath.Join("typescript", "schema"),
+	})
 }
 
 func invariantErr(err error, message string) {

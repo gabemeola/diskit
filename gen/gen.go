@@ -15,7 +15,12 @@ import (
 	"github.com/samber/lo"
 )
 
-func GenFromDocument(file []byte) {
+type GenOpts struct {
+	APIOutDir string
+	SchemaOutDir string
+}
+
+func GenFromDocument(file []byte, opts GenOpts) {
 	doc, err := libopenapi.NewDocument(file)
 	invariantErr(err, "error creating document")
 	model, errs := doc.BuildV3Model()
@@ -133,7 +138,7 @@ func GenFromDocument(file []byte) {
 			// fileName, data := typescript.GenSchema(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaRef)
 			go func() {
 				fileName, data := typescript.GenSchema2(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaByName)
-				err = os.WriteFile(filepath.Join("typescript", "schema", fileName), data, os.ModePerm)
+				err = os.WriteFile(filepath.Join(opts.SchemaOutDir, fileName), data, os.ModePerm)
 				if err != nil {
 					log.Printf("error writing %s: %s", schema.GetReference(), err)
 				}
@@ -157,7 +162,7 @@ func GenFromDocument(file []byte) {
 		// PrettyPrint(path)
 		results := typescript.GenPathItem(pathUrl, path, resolveSchemaRef)
 		for _, res := range results {
-			err = os.WriteFile(filepath.Join("typescript", "api", res.FileName), res.Content, os.ModePerm)
+			err = os.WriteFile(filepath.Join(opts.APIOutDir, res.FileName), res.Content, os.ModePerm)
 			invariantErr(err, "error writing file for: "+pathUrl)
 			// Clear memory
 			res.Content = []byte{}

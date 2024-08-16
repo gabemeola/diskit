@@ -1,6 +1,6 @@
 import { TypedResponse } from '../response';
-import { UpdateGuildRoleSchema } from '../schema/UpdateGuildRoleSchema';
 import { GuildRoleResponse } from '../schema/GuildRoleResponse';
+import { UpdateGuildRoleSchema } from '../schema/UpdateGuildRoleSchema';
 
 
 export class UpdateGuildRoleRequest extends Request {

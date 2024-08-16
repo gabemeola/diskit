@@ -1,6 +1,6 @@
 import { TypedResponse } from '../response';
-import { EmojiResponse } from '../schema/EmojiResponse';
 import { UpdateGuildEmojiSchema } from '../schema/UpdateGuildEmojiSchema';
+import { EmojiResponse } from '../schema/EmojiResponse';
 
 
 export class UpdateGuildEmojiRequest extends Request {

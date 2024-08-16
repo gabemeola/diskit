@@ -81,7 +81,9 @@ func GenOpRequestCode(
 	id = lo.CamelCase(id)
 	// TODO: Support other typed response codes
 	ok200Res := op.Responses.FindResponseByCode(200)
-	if ok200Res == nil {
+	if ok200Res == nil ||
+		// TODO: Content may be nil
+		ok200Res.Content == nil {
 		code := fmt.Sprintf(
 			`export function %s(): never {
 				throw new Error("TODO: Unimplemented")
