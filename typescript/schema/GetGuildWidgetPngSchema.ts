@@ -1,0 +1,2 @@
+
+export type GetGuildWidgetPngSchema = string & {}

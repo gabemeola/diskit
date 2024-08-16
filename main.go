@@ -180,7 +180,7 @@ func main() {
 		path := pair.Value
 		count++
 		fmt.Printf("GENERATING PATH (%d): %s\n", count, pathUrl)
-		if count >= 70 {
+		if count >= 80 {
 			break
 		}
 		// PrettyPrint(path)
