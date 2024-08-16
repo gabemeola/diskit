@@ -152,12 +152,12 @@ func main() {
 			// refName := schema.GetReference()
 			refName := schema.string
 			_, hasProcessed := processedSchemas[refName]
-			// log.Printf("Processing %s", refName)
 			// Skip if already processed
 			if hasProcessed {
 				wg.Done()
 				continue
 			}
+			log.Printf("Processing %s", refName)
 			processedSchemas[refName] = struct{}{}
 			// fileName, data := typescript.GenSchema(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaRef)
 			fileName, data := typescript.GenSchema2(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaByName)
@@ -170,13 +170,17 @@ func main() {
 
 	}()
 
+
 	// Gen API
-	for _, pathUrl := range pathToGen {
-		path, ok := model.Model.Paths.PathItems.Get(pathUrl)
-		if !ok {
-			log.Panicf("unable to load path")
+	count := 0
+	for pair := model.Model.Paths.PathItems.Oldest(); pair != nil; pair = pair.Next() {
+		pathUrl := pair.Key
+		path := pair.Value
+		count++
+		fmt.Printf("GENERATING PATH (%d): %s\n", count, pathUrl)
+		if count > 5 {
+			break
 		}
-		fmt.Printf("GENERATING PATH: %s\n", pathUrl)
 		// PrettyPrint(path)
 		results := typescript.GenPathItem(pathUrl, path, resolveSchemaRef)
 		for _, res := range results {
@@ -187,6 +191,23 @@ func main() {
 			res.FileName = ""
 		}
 	}
+	fmt.Printf("COUNT: %d\n", count)
+	// for _, pathUrl := range pathToGen {
+	// 	path, ok := model.Model.Paths.PathItems.Get(pathUrl)
+	// 	if !ok {
+	// 		log.Panicf("unable to load path")
+	// 	}
+	// 	fmt.Printf("GENERATING PATH: %s\n", pathUrl)
+	// 	// PrettyPrint(path)
+	// 	results := typescript.GenPathItem(pathUrl, path, resolveSchemaRef)
+	// 	for _, res := range results {
+	// 		err = os.WriteFile(filepath.Join("typescript", "api", res.FileName), res.Content, os.ModePerm)
+	// 		invariantErr(err, "error writing file for: "+pathUrl)
+	// 		// Clear memory
+	// 		res.Content = []byte{}
+	// 		res.FileName = ""
+	// 	}
+	// }
 
 	wg.Wait()
 	close(schemaGenCh)

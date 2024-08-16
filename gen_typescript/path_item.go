@@ -79,7 +79,11 @@ func GenOpRequestCode(
 	id := op.OperationId
 	id = lo.CamelCase(id)
 	// TODO: Support other typed response codes
-	resSchema := op.Responses.FindResponseByCode(200).Content.First().Value().Schema
+	ok200Res := op.Responses.FindResponseByCode(200)
+	if ok200Res == nil {
+		return []byte("TODO")
+	}
+	resSchema := ok200Res.Content.First().Value().Schema
 	childRefName := resolve(op, resSchema)
 	childSchemaName := strings.Replace(childRefName, "#/components/schemas/", "", 1)
 	// TODO: Use the "parameters" field on op
