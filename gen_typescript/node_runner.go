@@ -48,7 +48,7 @@ func lazyInitVM() node.VM {
 	const { transformSchemaObject, astToString } = require("openapi-typescript");
 
 	function schemaObjectToCode(schemaObj) {
-		console.log(schemaObj)
+		// console.log(schemaObj)
 		const ast = transformSchemaObject(schemaObj, {
 			ctx: {}
 		})

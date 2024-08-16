@@ -1,5 +1,5 @@
-import { TeamMembershipStates } from './TeamMembershipStates';
 import { SnowflakeType } from './SnowflakeType';
+import { TeamMembershipStates } from './TeamMembershipStates';
 import { UserResponse } from './UserResponse';
 
 export type TeamMemberResponse = {

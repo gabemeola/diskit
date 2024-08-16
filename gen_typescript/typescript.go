@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"slices"
 	"strings"
 
 	mapset "github.com/deckarep/golang-set/v2"
@@ -182,20 +183,21 @@ func GenSchema2(
 		// TODO: idk how to get the value from the capture group here
 		s = strings.TrimPrefix(s, `components["schemas"]["`)
 		s = strings.TrimSuffix(s, `"]`)
-		fmt.Printf("REPLACE: %s\n", s)
+		// fmt.Printf("REPLACE: %s\n", s)
 		schemaName := resolve(op, s)
 		schemaImports.Add(schemaName)
 
 		return schemaName
 	})
-	fmt.Printf("NODE RES: \n%s\n\n", schemaCode)
+	// fmt.Printf("NODE RES: \n%s\n\n", schemaCode)
 	schemaTypeCode := fmt.Sprintf("export type %s = %s", schemaName, schemaCode)
 
 	importsCode := ""
-	schemaImports.Each(func(s string) bool {
+	importsSlice := schemaImports.ToSlice()
+	slices.Sort(importsSlice)
+	for _, s := range importsSlice {
 		importsCode += fmt.Sprintf("import { %s } from './%s';\n", s, s)
-		return false
-	})
+	}
 
 	code := importsCode + "\n" + schemaTypeCode
 	return fileName, []byte(code)

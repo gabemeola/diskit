@@ -1,6 +1,6 @@
 import { AvailableLocalesEnum } from './AvailableLocalesEnum';
-import { PremiumTypes } from './PremiumTypes';
 import { Int53Type } from './Int53Type';
+import { PremiumTypes } from './PremiumTypes';
 import { SnowflakeType } from './SnowflakeType';
 
 export type UserPIIResponse = {

@@ -1,12 +1,12 @@
-import { ApplicationCommandUserOptionResponse } from './ApplicationCommandUserOptionResponse';
+import { ApplicationCommandAttachmentOptionResponse } from './ApplicationCommandAttachmentOptionResponse';
 import { ApplicationCommandBooleanOptionResponse } from './ApplicationCommandBooleanOptionResponse';
 import { ApplicationCommandChannelOptionResponse } from './ApplicationCommandChannelOptionResponse';
 import { ApplicationCommandIntegerOptionResponse } from './ApplicationCommandIntegerOptionResponse';
 import { ApplicationCommandMentionableOptionResponse } from './ApplicationCommandMentionableOptionResponse';
+import { ApplicationCommandNumberOptionResponse } from './ApplicationCommandNumberOptionResponse';
 import { ApplicationCommandRoleOptionResponse } from './ApplicationCommandRoleOptionResponse';
 import { ApplicationCommandStringOptionResponse } from './ApplicationCommandStringOptionResponse';
-import { ApplicationCommandAttachmentOptionResponse } from './ApplicationCommandAttachmentOptionResponse';
-import { ApplicationCommandNumberOptionResponse } from './ApplicationCommandNumberOptionResponse';
+import { ApplicationCommandUserOptionResponse } from './ApplicationCommandUserOptionResponse';
 
 export type ApplicationCommandSubcommandOptionResponse = {
     description: string;

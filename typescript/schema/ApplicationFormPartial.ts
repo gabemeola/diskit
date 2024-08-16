@@ -1,6 +1,6 @@
 import { ApplicationOAuth2InstallParams } from './ApplicationOAuth2InstallParams';
-import { SnowflakeType } from './SnowflakeType';
 import { ApplicationTypes } from './ApplicationTypes';
+import { SnowflakeType } from './SnowflakeType';
 
 export type ApplicationFormPartial = {
     cover_image?: string | null;

@@ -1,15 +1,15 @@
+import { ApplicationCommandAttachmentOptionResponse } from './ApplicationCommandAttachmentOptionResponse';
+import { ApplicationCommandBooleanOptionResponse } from './ApplicationCommandBooleanOptionResponse';
 import { ApplicationCommandChannelOptionResponse } from './ApplicationCommandChannelOptionResponse';
 import { ApplicationCommandIntegerOptionResponse } from './ApplicationCommandIntegerOptionResponse';
 import { ApplicationCommandMentionableOptionResponse } from './ApplicationCommandMentionableOptionResponse';
-import { ApplicationCommandRoleOptionResponse } from './ApplicationCommandRoleOptionResponse';
-import { ApplicationCommandSubcommandGroupOptionResponse } from './ApplicationCommandSubcommandGroupOptionResponse';
-import { ApplicationCommandAttachmentOptionResponse } from './ApplicationCommandAttachmentOptionResponse';
-import { ApplicationCommandBooleanOptionResponse } from './ApplicationCommandBooleanOptionResponse';
 import { ApplicationCommandNumberOptionResponse } from './ApplicationCommandNumberOptionResponse';
+import { ApplicationCommandRoleOptionResponse } from './ApplicationCommandRoleOptionResponse';
 import { ApplicationCommandStringOptionResponse } from './ApplicationCommandStringOptionResponse';
+import { ApplicationCommandSubcommandGroupOptionResponse } from './ApplicationCommandSubcommandGroupOptionResponse';
 import { ApplicationCommandSubcommandOptionResponse } from './ApplicationCommandSubcommandOptionResponse';
-import { ApplicationCommandUserOptionResponse } from './ApplicationCommandUserOptionResponse';
 import { ApplicationCommandType } from './ApplicationCommandType';
+import { ApplicationCommandUserOptionResponse } from './ApplicationCommandUserOptionResponse';
 import { SnowflakeType } from './SnowflakeType';
 
 export type ApplicationCommandResponse = {

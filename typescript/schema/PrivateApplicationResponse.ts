@@ -1,7 +1,7 @@
-import { SnowflakeType } from './SnowflakeType';
 import { ApplicationOAuth2InstallParamsResponse } from './ApplicationOAuth2InstallParamsResponse';
-import { TeamResponse } from './TeamResponse';
 import { ApplicationTypes } from './ApplicationTypes';
+import { SnowflakeType } from './SnowflakeType';
+import { TeamResponse } from './TeamResponse';
 import { UserResponse } from './UserResponse';
 
 export type PrivateApplicationResponse = {

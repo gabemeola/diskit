@@ -122,7 +122,7 @@ func main() {
 			log.Panicf("Error resolving schema by name: %s", schemaName)
 		}
 		wg.Add(1)
-		log.Printf("Resolving %s", schemaName)
+		// log.Printf("Resolving %s", schemaName)
 		schemaGenCh <- struct {
 			string
 			*v3.Operation
@@ -145,7 +145,7 @@ func main() {
 			// refName := schema.GetReference()
 			refName := schema.string
 			_, hasProcessed := processedSchemas[refName]
-			log.Printf("Processing %s", refName)
+			// log.Printf("Processing %s", refName)
 			// Skip if already processed
 			if hasProcessed {
 				wg.Done()
