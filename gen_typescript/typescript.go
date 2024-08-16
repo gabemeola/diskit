@@ -196,8 +196,12 @@ func GenSchema2(
 	schemaTypeCode := ""
 	if schemaCode == "" {
 		schemaTypeCode = fmt.Sprintf(
-`// FIXME: Unexpected empty schema
+			`// FIXME: Unexpected empty schema
 export type %s = unknown`, schemaName)
+	} else if schemaCode == "Record<string, never>" {
+		schemaTypeCode = fmt.Sprintf(
+			`// FIXME: Unexpected record with never
+export type %s = %s`, schemaName, schemaCode)
 	} else if strings.HasPrefix(schemaCode, "{") {
 		schemaTypeCode = fmt.Sprintf("export interface %s %s", schemaName, schemaCode)
 	} else if schemaCode == "string" || schemaCode == "number" {
