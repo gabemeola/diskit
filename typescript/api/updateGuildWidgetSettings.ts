@@ -1,6 +1,6 @@
 import { TypedResponse } from '../response';
-import { WidgetSettingsResponse } from '../schema/WidgetSettingsResponse';
 import { UpdateGuildWidgetSettingsSchema } from '../schema/UpdateGuildWidgetSettingsSchema';
+import { WidgetSettingsResponse } from '../schema/WidgetSettingsResponse';
 
 
 export class UpdateGuildWidgetSettingsRequest extends Request {

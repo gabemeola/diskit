@@ -3,8 +3,6 @@ package gen
 import (
 	"fmt"
 	"log"
-	"os"
-	"path/filepath"
 	"strings"
 	"sync"
 
@@ -15,9 +13,11 @@ import (
 	"github.com/samber/lo"
 )
 
+type HandleFileEmit = func(name string, content []byte)
+
 type GenOpts struct {
-	APIOutDir string
-	SchemaOutDir string
+	OnAPIFileEmit    HandleFileEmit
+	OnSchemaFileEmit HandleFileEmit
 }
 
 func GenFromDocument(file []byte, opts GenOpts) {
@@ -138,16 +138,12 @@ func GenFromDocument(file []byte, opts GenOpts) {
 			// fileName, data := typescript.GenSchema(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaRef)
 			go func() {
 				fileName, data := typescript.GenSchema2(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaByName)
-				err = os.WriteFile(filepath.Join(opts.SchemaOutDir, fileName), data, os.ModePerm)
-				if err != nil {
-					log.Printf("error writing %s: %s", schema.GetReference(), err)
-				}
+				opts.OnSchemaFileEmit(fileName, data)
 				wg.Done()
 			}()
 		}
 
 	}()
-
 
 	// Gen API
 	count := 0
@@ -162,8 +158,7 @@ func GenFromDocument(file []byte, opts GenOpts) {
 		// PrettyPrint(path)
 		results := typescript.GenPathItem(pathUrl, path, resolveSchemaRef)
 		for _, res := range results {
-			err = os.WriteFile(filepath.Join(opts.APIOutDir, res.FileName), res.Content, os.ModePerm)
-			invariantErr(err, "error writing file for: "+pathUrl)
+			opts.OnAPIFileEmit(res.FileName, res.Content)
 			// Clear memory
 			res.Content = []byte{}
 			res.FileName = ""

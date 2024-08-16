@@ -1,6 +1,6 @@
 import { TypedResponse } from '../response';
-import { GuildWelcomeScreenResponse } from '../schema/GuildWelcomeScreenResponse';
 import { WelcomeScreenPatchRequestPartial } from '../schema/WelcomeScreenPatchRequestPartial';
+import { GuildWelcomeScreenResponse } from '../schema/GuildWelcomeScreenResponse';
 
 
 export class UpdateGuildWelcomeScreenRequest extends Request {

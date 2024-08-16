@@ -29,6 +29,9 @@ var pathToGen = []string{
 	"/applications/{application_id}/guilds/{guild_id}/commands/{command_id}",
 }
 
+var apiOutDir = filepath.Join("typescript", "api")
+var schemaOutDir = filepath.Join("typescript", "schema")
+
 func main() {
 	start := time.Now()
 	defer func() {
@@ -39,8 +42,14 @@ func main() {
 	invariantErr(err, "error reading file")
 
 	gen.GenFromDocument(file, gen.GenOpts{
-		APIOutDir:    filepath.Join("typescript", "api"),
-		SchemaOutDir: filepath.Join("typescript", "schema"),
+		OnAPIFileEmit: func(name string, content []byte) {
+			err = os.WriteFile(filepath.Join(apiOutDir, name), content, os.ModePerm)
+			invariantErr(err, "error writing api file for: "+name)
+		},
+		OnSchemaFileEmit: func(name string, content []byte) {
+			err = os.WriteFile(filepath.Join(schemaOutDir, name), content, os.ModePerm)
+			invariantErr(err, "error writing schema file for: "+name)
+		},
 	})
 }
 
