@@ -3,8 +3,10 @@ package typescript
 import (
 	"fmt"
 	"log"
+	"regexp"
 	"strings"
 
+	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/gabemeola/diskit/ast"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
 	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
@@ -91,7 +93,7 @@ func GenSchema(
 		// fmt.Printf("RESOLVED: %+v\n", resolve(m.Value("id")))
 		// fmt.Printf("description (%s): %+v\n", m.Value("description").GetReference(), m.Value("description").Schema())
 		code += "\n}"
-		
+
 		importsCode := ""
 		for schemaName := range imports {
 			importsCode += fmt.Sprintf("import { %s } from './%s';\n", schemaName, schemaName)
@@ -153,12 +155,15 @@ func schemaToTSType(schema *base.SchemaProxy) string {
 	return strings.Join(tsTypes, " | ")
 }
 
+type ResolveSchemaByName = func(op *v3.Operation, schemaName string) string
+
+var refRegex = regexp.MustCompile(`components\["schemas"\]\["(\w+)"\]`)
 
 func GenSchema2(
 	schemaName string,
 	op *v3.Operation,
 	schema *base.SchemaProxy,
-	resolve ResolveSchemaRef,
+	resolve ResolveSchemaByName,
 ) (fileName string, content []byte) {
 	log.Printf("Generating Schema: %s", schemaName)
 	// fmt.Printf("%+v\n", s)
@@ -170,7 +175,28 @@ func GenSchema2(
 		log.Panicf("error marsheling json: %s", err)
 	}
 	res := nodeVM.Run(fmt.Sprintf(`schemaObjectToCode(%s)`, string(jsonBytes)))
-	fmt.Printf("NODE RES: \n%s\n\n", res)
-	code := fmt.Sprintf("export type %s = %s", schemaName, res)
+	schemaCode := res.String()
+	schemaImports := mapset.NewThreadUnsafeSet[string]()
+
+	schemaCode = refRegex.ReplaceAllStringFunc(schemaCode, func(s string) string {
+		// TODO: idk how to get the value from the capture group here
+		s = strings.TrimPrefix(s, `components["schemas"]["`)
+		s = strings.TrimSuffix(s, `"]`)
+		fmt.Printf("REPLACE: %s\n", s)
+		schemaName := resolve(op, s)
+		schemaImports.Add(schemaName)
+
+		return schemaName
+	})
+	fmt.Printf("NODE RES: \n%s\n\n", schemaCode)
+	schemaTypeCode := fmt.Sprintf("export type %s = %s", schemaName, schemaCode)
+
+	importsCode := ""
+	schemaImports.Each(func(s string) bool {
+		importsCode += fmt.Sprintf("import { %s } from './%s';\n", s, s)
+		return false
+	})
+
+	code := importsCode + "\n" + schemaTypeCode
 	return fileName, []byte(code)
 }

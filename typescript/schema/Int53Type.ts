@@ -1,1 +1,2 @@
-export type Int53Type = number & {}
+
+export type Int53Type = number

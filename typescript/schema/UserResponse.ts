@@ -2,15 +2,17 @@ import { SnowflakeType } from './SnowflakeType';
 import { Int53Type } from './Int53Type';
 
 export type UserResponse = {
-	id: SnowflakeType;
-	username: string;
-	avatar?: string | null;
-	discriminator: string;
-	public_flags: number;
-	flags: Int53Type;
-	bot?: boolean | null;
-	system?: boolean | null;
-	banner?: string | null;
-	accent_color?: number | null;
-	global_name?: string | null;
+    /** Format: int32 */
+    accent_color?: number | null;
+    avatar?: string | null;
+    banner?: string | null;
+    bot?: boolean | null;
+    discriminator: string;
+    flags: Int53Type;
+    global_name?: string | null;
+    id: SnowflakeType;
+    /** Format: int32 */
+    public_flags: number;
+    system?: boolean | null;
+    username: string;
 }

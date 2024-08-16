@@ -41,14 +41,14 @@ func lazyInitVM() node.VM {
 			// println()
 		},
 		OnError: func(msg string) {
-			fmt.Printf("Node Error: %s\n", msg)
+			// fmt.Printf("Node Error: %s\n", msg)
 		},
 	})
 	vm.Run(`
 	const { transformSchemaObject, astToString } = require("openapi-typescript");
 
 	function schemaObjectToCode(schemaObj) {
-		console.log('HELLO', schemaObj)
+		console.log(schemaObj)
 		const ast = transformSchemaObject(schemaObj, {
 			ctx: {}
 		})
