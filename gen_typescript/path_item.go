@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strings"
 
+	mapset "github.com/deckarep/golang-set/v2"
 	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
 	"github.com/samber/lo"
 )
@@ -120,13 +121,15 @@ func GenOpRequestCode(
 		paramsCode += fmt.Sprintf("body: %s", reqBodySchemaName)
 	}
 
-	// TODO: Dedupe and sort imports
-	imports := ""
-	imports += "import { TypedResponse } from '../response';\n"
-	imports += fmt.Sprintf("import { %s } from '../schema/%s';\n", childSchemaName, childSchemaName)
+	schemaImports := mapset.NewThreadUnsafeSet(childSchemaName)
 	if reqBodySchemaName != "" {
-		imports += fmt.Sprintf("import { %s } from '../schema/%s';\n", reqBodySchemaName, reqBodySchemaName)
+		schemaImports.Add(reqBodySchemaName)
 	}
+	imports := "import { TypedResponse } from '../response';\n"
+	schemaImports.Each(func(s string) bool {
+		imports += fmt.Sprintf("import { %s } from '../schema/%s';\n", s, s)
+		return false
+	})
 
 	reqClassName := lo.PascalCase(id + "Request")
 	responseTypeName := lo.PascalCase(id + "Response")

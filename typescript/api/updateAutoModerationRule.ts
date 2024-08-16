@@ -1,6 +1,5 @@
 import { TypedResponse } from '../response';
 import { UpdateAutoModerationRuleSchema } from '../schema/UpdateAutoModerationRuleSchema';
-import { UpdateAutoModerationRuleSchema } from '../schema/UpdateAutoModerationRuleSchema';
 
 
 export class UpdateAutoModerationRuleRequest extends Request {

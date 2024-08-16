@@ -1,6 +1,5 @@
 import { TypedResponse } from '../response';
 import { UpdateWebhookByTokenSchema } from '../schema/UpdateWebhookByTokenSchema';
-import { UpdateWebhookByTokenSchema } from '../schema/UpdateWebhookByTokenSchema';
 
 
 export class UpdateWebhookByTokenRequest extends Request {

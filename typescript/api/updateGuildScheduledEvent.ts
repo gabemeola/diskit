@@ -1,6 +1,5 @@
 import { TypedResponse } from '../response';
 import { UpdateGuildScheduledEventSchema } from '../schema/UpdateGuildScheduledEventSchema';
-import { UpdateGuildScheduledEventSchema } from '../schema/UpdateGuildScheduledEventSchema';
 
 
 export class UpdateGuildScheduledEventRequest extends Request {

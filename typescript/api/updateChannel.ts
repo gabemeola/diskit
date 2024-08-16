@@ -1,6 +1,5 @@
 import { TypedResponse } from '../response';
 import { UpdateChannelSchema } from '../schema/UpdateChannelSchema';
-import { UpdateChannelSchema } from '../schema/UpdateChannelSchema';
 
 
 export class UpdateChannelRequest extends Request {

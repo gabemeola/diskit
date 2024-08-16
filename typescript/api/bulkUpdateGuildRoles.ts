@@ -1,6 +1,5 @@
 import { TypedResponse } from '../response';
 import { BulkUpdateGuildRolesSchema } from '../schema/BulkUpdateGuildRolesSchema';
-import { BulkUpdateGuildRolesSchema } from '../schema/BulkUpdateGuildRolesSchema';
 
 
 export class BulkUpdateGuildRolesRequest extends Request {
