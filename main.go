@@ -116,6 +116,21 @@ func main() {
 		return schemaName
 	}
 
+	resolveSchemaByName := func(op *v3.Operation, schemaName string) string {
+		schema, ok := model.Model.Components.Schemas.Get(schemaName)
+		if !ok {
+			log.Panicf("Error resolving schema by name: %s", schemaName)
+		}
+		wg.Add(1)
+		log.Printf("Resolving %s", schemaName)
+		schemaGenCh <- struct {
+			string
+			*v3.Operation
+			*base.SchemaProxy
+		}{schemaName, op, schema}
+		return schemaName
+	}
+
 	// Process new Schemas in Queue
 	go func() {
 		// for {
@@ -127,15 +142,18 @@ func main() {
 		var processedSchemas = map[string]struct{}{}
 
 		for schema := range schemaGenCh {
-			refName := schema.GetReference()
+			// refName := schema.GetReference()
+			refName := schema.string
 			_, hasProcessed := processedSchemas[refName]
+			log.Printf("Processing %s", refName)
 			// Skip if already processed
 			if hasProcessed {
 				wg.Done()
 				continue
 			}
 			processedSchemas[refName] = struct{}{}
-			fileName, data := typescript.GenSchema2(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaRef)
+			// fileName, data := typescript.GenSchema(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaRef)
+			fileName, data := typescript.GenSchema2(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaByName)
 			err = os.WriteFile(filepath.Join("typescript", "schema", fileName), data, os.ModePerm)
 			if err != nil {
 				log.Printf("error writing %s: %s", schema.GetReference(), err)

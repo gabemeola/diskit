@@ -1,6 +1,6 @@
 
 export type BotAccountPatchRequest = {
-	username: string;
-	avatar?: string | null;
-	banner?: string | null;
+    avatar?: string | null;
+    banner?: string | null;
+    username: string;
 }

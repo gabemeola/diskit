@@ -1,3 +1,3 @@
 import { ApplicationCommandResponse } from './ApplicationCommandResponse';
 
-export type ListGuildApplicationCommandsSchema = ApplicationCommandResponse
+export type ListGuildApplicationCommandsSchema = ApplicationCommandResponse[] | null

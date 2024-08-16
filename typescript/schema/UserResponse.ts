@@ -1,5 +1,5 @@
-import { SnowflakeType } from './SnowflakeType';
 import { Int53Type } from './Int53Type';
+import { SnowflakeType } from './SnowflakeType';
 
 export type UserResponse = {
     /** Format: int32 */
