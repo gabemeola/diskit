@@ -176,7 +176,10 @@ func GenSchema2(
 		log.Panicf("error marsheling json: %s", err)
 	}
 	res := nodeVM.Run(fmt.Sprintf(`schemaObjectToCode(%s)`, string(jsonBytes)))
-	schemaCode := res.String()
+	schemaCode := strings.TrimSpace(res.String())
+	// if schemaName == "ListChannelInvitesSchema" {
+	// 	fmt.Printf("RES: \n%+v\n\n", res)
+	// }
 	schemaImports := mapset.NewThreadUnsafeSet[string]()
 
 	schemaCode = refRegex.ReplaceAllStringFunc(schemaCode, func(s string) string {
@@ -189,10 +192,13 @@ func GenSchema2(
 
 		return schemaName
 	})
-	schemaCode = strings.TrimSpace(schemaCode)
 	// fmt.Printf("NODE RES: \n%s\n\n", schemaCode)
 	schemaTypeCode := ""
-	if strings.HasPrefix(schemaCode, "{") {
+	if schemaCode == "" {
+		schemaTypeCode = fmt.Sprintf(
+`// FIXME: Unexpected empty schema
+export type %s = unknown`, schemaName)
+	} else if strings.HasPrefix(schemaCode, "{") {
 		schemaTypeCode = fmt.Sprintf("export interface %s %s", schemaName, schemaCode)
 	} else if schemaCode == "string" || schemaCode == "number" {
 		// Use a loose type for named plain strings and numbers
