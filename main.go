@@ -23,10 +23,17 @@ var pathToGen = []string{
 	"/oauth2/applications/@me",
 	"/applications/@me",
 	"/applications/{application_id}",
+	// TODO: Full operations
+	// TODO: Support typed path params
 	"/applications/{application_id}/guilds/{guild_id}/commands",
 	// TODO: Support 201 responses (and any other codes)
 	// "/guilds",
 	"/gateway/bot",
+	"/applications/{application_id}/guilds/{guild_id}/commands/permissions",
+	"/applications/{application_id}/guilds/{guild_id}/commands/{command_id}/permissions",
+	"/applications/{application_id}/role-connections/metadata",
+	"/applications/{application_id}/entitlements/{entitlement_id}/consume",
+	"/applications/{application_id}/guilds/{guild_id}/commands/{command_id}",
 }
 
 func main() {
