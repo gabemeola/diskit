@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import typescript from "@rollup/plugin-typescript";
 import { globbySync } from "globby";
-import pkgJson from "./package.json" assert { type: "json" };
+import pkgJson from "./package.json" with { type: "json" };
 
 const outDir = "pkg";
 const topLevelFiles = globbySync(["*.ts"]);
@@ -103,7 +103,11 @@ Make sure this dependency is listed in the package.json or external.
 }
 
 // Clean
-fs.rmdirSync("pkg", { recursive: true, force: true });
+try {
+  fs.rmdirSync("pkg", { recursive: true, force: true });
+} catch(_) {
+
+}
 // Generate pkg json
 writePkgJson();
 export default [buildConfig("cjs"), buildConfig("esm")];

@@ -130,7 +130,7 @@ packages:
     engines: {node: '>=4.0.0'}
 
   diskit@file:../typescript/diskit-0.0.0-alpha.3.tgz:
-    resolution: {integrity: sha512-WMAUf0Ghr7mraI2m2qxACbcUzcuMhoB7oQjZcx9wuxwDC8z0TphpQTmw/MLerOZcfDAeNixN9uHY1optKRkkRg==, tarball: file:../typescript/diskit-0.0.0-alpha.3.tgz}
+    resolution: {integrity: sha512-ff2sujMUF9ORIDnf+GGVNhLSEXs/pVcLiqWYMOIBfcvP8ymTYoBwyxVdcf7IMWezEeydyIgFYSed2wVTUFdBlA==, tarball: file:../typescript/diskit-0.0.0-alpha.3.tgz}
     version: 0.0.0-alpha.3
 
   eastasianwidth@0.2.0:
