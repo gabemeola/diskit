@@ -160,12 +160,14 @@ func main() {
 			// log.Printf("Processing %s", refName)
 			processedSchemas[refName] = struct{}{}
 			// fileName, data := typescript.GenSchema(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaRef)
-			fileName, data := typescript.GenSchema2(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaByName)
-			err = os.WriteFile(filepath.Join("typescript", "schema", fileName), data, os.ModePerm)
-			if err != nil {
-				log.Printf("error writing %s: %s", schema.GetReference(), err)
-			}
-			wg.Done()
+			go func() {
+				fileName, data := typescript.GenSchema2(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaByName)
+				err = os.WriteFile(filepath.Join("typescript", "schema", fileName), data, os.ModePerm)
+				if err != nil {
+					log.Printf("error writing %s: %s", schema.GetReference(), err)
+				}
+				wg.Done()
+			}()
 		}
 
 	}()
@@ -178,7 +180,7 @@ func main() {
 		path := pair.Value
 		count++
 		fmt.Printf("GENERATING PATH (%d): %s\n", count, pathUrl)
-		if count >= 36 {
+		if count >= 37 {
 			break
 		}
 		// PrettyPrint(path)
