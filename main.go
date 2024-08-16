@@ -17,8 +17,7 @@ import (
 )
 
 var pathToGen = []string{
-	// TODO: Needs to support `type` in response schema
-	// "/users/@me/connections",
+	"/users/@me/connections",
 	// TODO: Support other ops outside of GET
 	"/users/@me",
 	"/oauth2/applications/@me",
