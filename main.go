@@ -178,7 +178,7 @@ func main() {
 		path := pair.Value
 		count++
 		fmt.Printf("GENERATING PATH (%d): %s\n", count, pathUrl)
-		if count >= 20 {
+		if count >= 36 {
 			break
 		}
 		// PrettyPrint(path)
