@@ -152,3 +152,25 @@ func schemaToTSType(schema *base.SchemaProxy) string {
 
 	return strings.Join(tsTypes, " | ")
 }
+
+
+func GenSchema2(
+	schemaName string,
+	op *v3.Operation,
+	schema *base.SchemaProxy,
+	resolve ResolveSchemaRef,
+) (fileName string, content []byte) {
+	log.Printf("Generating Schema: %s", schemaName)
+	// fmt.Printf("%+v\n", s)
+	s := schema.Schema()
+	fileName = schemaName + ".ts"
+
+	jsonBytes, err := s.MarshalJSON()
+	if err != nil {
+		log.Panicf("error marsheling json: %s", err)
+	}
+	res := nodeVM.Run(fmt.Sprintf(`schemaObjectToCode(%s)`, string(jsonBytes)))
+	fmt.Printf("NODE RES: \n%s\n\n", res)
+	code := fmt.Sprintf("export type %s = %s", schemaName, res)
+	return fileName, []byte(code)
+}

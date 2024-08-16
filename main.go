@@ -9,7 +9,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gabemeola/diskit/ast"
 	typescript "github.com/gabemeola/diskit/gen_typescript"
 	"github.com/pb33f/libopenapi"
 	"github.com/pb33f/libopenapi/datamodel/high/base"
@@ -81,16 +80,16 @@ func main() {
 	// println(string(b))
 	// PrettyPrint(schema)
 
-	f := ast.Function{
-		Name:       "test",
-		Comment:    "Really Cool Test Function",
-		ReturnType: ast.TypeString,
-		Params:     []ast.FunctionParam{},
-	}
+	// f := ast.Function{
+	// 	Name:       "test",
+	// 	Comment:    "Really Cool Test Function",
+	// 	ReturnType: ast.TypeString,
+	// 	Params:     []ast.FunctionParam{},
+	// }
 
-	data := typescript.GenFunction(f)
-	err = os.WriteFile("tmp/test.ts", []byte(data), os.ModePerm)
-	invariantErr(err, "error writing file")
+	// data := typescript.GenFunction(f)
+	// err = os.WriteFile("tmp/test.ts", []byte(data), os.ModePerm)
+	// invariantErr(err, "error writing file")
 
 	schemaGenCh := make(chan struct {
 		string
@@ -136,7 +135,7 @@ func main() {
 				continue
 			}
 			processedSchemas[refName] = struct{}{}
-			fileName, data := typescript.GenSchema(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaRef)
+			fileName, data := typescript.GenSchema2(schema.string, schema.Operation, schema.SchemaProxy, resolveSchemaRef)
 			err = os.WriteFile(filepath.Join("typescript", "schema", fileName), data, os.ModePerm)
 			if err != nil {
 				log.Printf("error writing %s: %s", schema.GetReference(), err)
