@@ -1,2 +1,2 @@
 
-export type SnowflakeType = string
+export type SnowflakeType = string & {}

@@ -189,10 +189,14 @@ func GenSchema2(
 
 		return schemaName
 	})
+	schemaCode = strings.TrimSpace(schemaCode)
 	// fmt.Printf("NODE RES: \n%s\n\n", schemaCode)
 	schemaTypeCode := ""
 	if strings.HasPrefix(schemaCode, "{") {
 		schemaTypeCode = fmt.Sprintf("export interface %s %s", schemaName, schemaCode)
+	} else if schemaCode == "string" || schemaCode == "number" {
+		// Use a loose type for named plain strings and numbers
+		schemaTypeCode = fmt.Sprintf("export type %s = %s & {}", schemaName, schemaCode)
 	} else {
 		schemaTypeCode = fmt.Sprintf("export type %s = %s", schemaName, schemaCode)
 	}
