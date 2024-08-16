@@ -202,7 +202,7 @@ export type %s = unknown`, schemaName)
 		schemaTypeCode = fmt.Sprintf(
 			`// FIXME: Unexpected record with never
 export type %s = %s`, schemaName, schemaCode)
-	} else if strings.HasPrefix(schemaCode, "{") {
+	} else if strings.HasPrefix(schemaCode, "{") && strings.HasSuffix(schemaCode, "}") {
 		schemaTypeCode = fmt.Sprintf("export interface %s %s", schemaName, schemaCode)
 	} else if schemaCode == "string" || schemaCode == "number" {
 		// Use a loose type for named plain strings and numbers
