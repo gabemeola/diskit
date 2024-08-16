@@ -8,9 +8,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MPL-2.0",
   "dependencies": {
-    "diskit": "../typescript/diskit-0.0.0-alpha.3.tgz"
+    "diskit": "../typescript/diskit-0.0.0-alpha.4.tgz"
   },
   "devDependencies": {
     "serve": "^14.2.3"
