@@ -18,6 +18,8 @@ type HandleFileEmit = func(name string, content []byte)
 type GenOpts struct {
 	OnAPIFileEmit    HandleFileEmit
 	OnSchemaFileEmit HandleFileEmit
+	// Only allow specific endpoints
+	Allowlist []string
 }
 
 func GenFromDocument(file []byte, opts GenOpts) {
@@ -147,9 +149,7 @@ func GenFromDocument(file []byte, opts GenOpts) {
 
 	// Gen API
 	count := 0
-	for pair := model.Model.Paths.PathItems.Oldest(); pair != nil; pair = pair.Next() {
-		pathUrl := pair.Key
-		path := pair.Value
+	genPath := func(pathUrl string, path *v3.PathItem) {
 		count++
 		fmt.Printf("GENERATING PATH (%d): %s\n", count, pathUrl)
 		// if count >= 100 {
@@ -159,28 +159,29 @@ func GenFromDocument(file []byte, opts GenOpts) {
 		results := typescript.GenPathItem(pathUrl, path, resolveSchemaRef)
 		for _, res := range results {
 			opts.OnAPIFileEmit(res.FileName, res.Content)
-			// Clear memory
+			// Clear memory to avoid the GC tax
 			res.Content = []byte{}
 			res.FileName = ""
 		}
 	}
+	if opts.Allowlist != nil {
+		// Gen allowlisted paths
+		for _, pathUrl := range opts.Allowlist {
+			path, ok := model.Model.Paths.PathItems.Get(pathUrl)
+			if !ok {
+				log.Panicf("unable to load path: %s", pathUrl)
+			}
+			genPath(pathUrl, path)
+		}
+	} else {
+		// Gen all paths
+		for pair := model.Model.Paths.PathItems.Oldest(); pair != nil; pair = pair.Next() {
+			pathUrl := pair.Key
+			path := pair.Value
+			genPath(pathUrl, path)
+		}
+	}
 	fmt.Printf("COUNT: %d\n", count)
-	// for _, pathUrl := range pathToGen {
-	// 	path, ok := model.Model.Paths.PathItems.Get(pathUrl)
-	// 	if !ok {
-	// 		log.Panicf("unable to load path")
-	// 	}
-	// 	fmt.Printf("GENERATING PATH: %s\n", pathUrl)
-	// 	// PrettyPrint(path)
-	// 	results := typescript.GenPathItem(pathUrl, path, resolveSchemaRef)
-	// 	for _, res := range results {
-	// 		err = os.WriteFile(filepath.Join("typescript", "api", res.FileName), res.Content, os.ModePerm)
-	// 		invariantErr(err, "error writing file for: "+pathUrl)
-	// 		// Clear memory
-	// 		res.Content = []byte{}
-	// 		res.FileName = ""
-	// 	}
-	// }
 
 	wg.Wait()
 	close(schemaGenCh)

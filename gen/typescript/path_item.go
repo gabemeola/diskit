@@ -58,9 +58,12 @@ func GenPatchRequest(pathUrl string, op *v3.Operation, resolve ResolveSchemaRef)
 	id := op.OperationId
 	log.Printf("Generating OP: %s", id)
 	reqBody := op.RequestBody
-	reqBodySchema := reqBody.Content.First().Value().Schema
-	reqBodyRef := resolve(op, reqBodySchema)
-	reqBodySchemaName := strings.Replace(reqBodyRef, "#/components/schemas/", "", 1)
+	reqBodySchemaName := ""
+	if reqBody != nil && reqBody.Content != nil {
+		reqBodySchema := reqBody.Content.First().Value().Schema
+		reqBodyRef := resolve(op, reqBodySchema)
+		reqBodySchemaName = strings.Replace(reqBodyRef, "#/components/schemas/", "", 1)
+	}
 	code := GenOpRequestCode("PATCH", pathUrl, op, resolve, reqBodySchemaName)
 
 	fileName := lo.CamelCase(id) + ".ts"
@@ -81,17 +84,26 @@ func GenOpRequestCode(
 	id = lo.CamelCase(id)
 	// TODO: Support other typed response codes
 	ok200Res := op.Responses.FindResponseByCode(200)
-	if ok200Res == nil ||
-		// TODO: Content may be nil
-		ok200Res.Content == nil {
+	if ok200Res == nil {
 		code := fmt.Sprintf(
 			`export function %s(): never {
-				throw new Error("TODO: Unimplemented")
+				throw new Error("A 200 response is unspecified in schema")
 			}`,
 			id,
 		)
 		return []byte(code)
 	}
+	// TODO: It might just have no content but it most cases they are untyped
+	if ok200Res.Content == nil {
+		code := fmt.Sprintf(
+			`export function %s(): never {
+				throw new Error("The 200 response has no specified content schema")
+			}`,
+			id,
+		)
+		return []byte(code)
+	}
+
 	resSchema := ok200Res.Content.First().Value().Schema
 	childRefName := resolve(op, resSchema)
 	childSchemaName := strings.Replace(childRefName, "#/components/schemas/", "", 1)

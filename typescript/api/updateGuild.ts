@@ -1,6 +1,6 @@
 import { TypedResponse } from '../response';
-import { GuildResponse } from '../schema/GuildResponse';
 import { GuildPatchRequestPartial } from '../schema/GuildPatchRequestPartial';
+import { GuildResponse } from '../schema/GuildResponse';
 
 
 export class UpdateGuildRequest extends Request {

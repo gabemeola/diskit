@@ -1,6 +1,6 @@
 import { TypedResponse } from '../response';
-import { UpdateMyGuildMemberSchema } from '../schema/UpdateMyGuildMemberSchema';
 import { PrivateGuildMemberResponse } from '../schema/PrivateGuildMemberResponse';
+import { UpdateMyGuildMemberSchema } from '../schema/UpdateMyGuildMemberSchema';
 
 
 export class UpdateMyGuildMemberRequest extends Request {
