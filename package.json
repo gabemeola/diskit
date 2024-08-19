@@ -1,0 +1,14 @@
+{
+  "name": "diskit",
+  "version": "1.0.0",
+  "author": "",
+  "license": "MPL-2.0",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.3.0",
+    "typescript": "^5.5.4"
+  }
+}

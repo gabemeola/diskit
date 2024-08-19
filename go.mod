@@ -3,8 +3,10 @@ module github.com/gabemeola/diskit
 go 1.22.5
 
 require (
+	github.com/deckarep/golang-set/v2 v2.6.0
 	github.com/pb33f/libopenapi v0.16.10
 	github.com/samber/lo v1.46.0
+	github.com/tidwall/go-node v0.1.0
 )
 
 require (

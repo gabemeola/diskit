@@ -1,6 +1,6 @@
 
-export type BotAccountPatchRequest = {
-	username: string;
-	avatar?: string | null;
-	banner?: string | null;
+export interface BotAccountPatchRequest {
+    avatar?: string | null;
+    banner?: string | null;
+    username: string;
 }

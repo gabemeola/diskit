@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       diskit:
-        specifier: ../typescript/diskit-0.0.0-alpha.3.tgz
-        version: file:../typescript/diskit-0.0.0-alpha.3.tgz
+        specifier: ../typescript/diskit-0.0.0-alpha.4.tgz
+        version: file:../typescript/diskit-0.0.0-alpha.4.tgz
     devDependencies:
       serve:
         specifier: ^14.2.3
@@ -129,9 +129,9 @@ packages:
     resolution: {integrity: sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==}
     engines: {node: '>=4.0.0'}
 
-  diskit@file:../typescript/diskit-0.0.0-alpha.3.tgz:
-    resolution: {integrity: sha512-WMAUf0Ghr7mraI2m2qxACbcUzcuMhoB7oQjZcx9wuxwDC8z0TphpQTmw/MLerOZcfDAeNixN9uHY1optKRkkRg==, tarball: file:../typescript/diskit-0.0.0-alpha.3.tgz}
-    version: 0.0.0-alpha.3
+  diskit@file:../typescript/diskit-0.0.0-alpha.4.tgz:
+    resolution: {integrity: sha512-Bq8BHH2KhIB0J6JU4w/4I7SwgvsX+cN7mpM1ZM/Uhnsx2ea/63MBLt5IXUqWcMnRs4D0KVL6Wve/dMto04HIQA==, tarball: file:../typescript/diskit-0.0.0-alpha.4.tgz}
+    version: 0.0.0-alpha.4
 
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
@@ -475,7 +475,7 @@ snapshots:
 
   deep-extend@0.6.0: {}
 
-  diskit@file:../typescript/diskit-0.0.0-alpha.3.tgz: {}
+  diskit@file:../typescript/diskit-0.0.0-alpha.4.tgz: {}
 
   eastasianwidth@0.2.0: {}
 
